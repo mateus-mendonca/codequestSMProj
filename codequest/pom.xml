@@ -70,7 +70,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <AppClass>com.codequest.App</AppClass>
+                            <mainClass>com.codequest.App</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

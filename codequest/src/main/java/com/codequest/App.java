@@ -6,6 +6,8 @@ import com.codequest.controller.QuestaoController;
 import com.codequest.service.ModuloService;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.util.Map;
 
@@ -19,9 +21,19 @@ public class App {
         QuestaoController questaoController = new QuestaoController();
         ModuloService moduloService = new ModuloService();
 
+        // Configuração explícita do Thymeleaf, apontando para src/main/resources/templates
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        resolver.setPrefix("/templates/");
+        resolver.setSuffix(".html");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setCacheable(false);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(resolver);
+
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("/static");
-            config.fileRenderer(new JavalinThymeleaf());
+            config.fileRenderer(new JavalinThymeleaf(templateEngine));
         }).start(7000);
 
         // ---------- Rotas públicas ----------
