@@ -900,3 +900,140 @@ input[type="button"]:active {
         font-size: 22px;
     }
 }
+
+/* ==========================================================================
+   SISTEMA DE TOAST NOTIFICATIONS
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #0d1714;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-size: 13.5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    animation: toast-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s ease;
+    max-width: 360px;
+}
+
+.toast-success {
+    border-color: var(--green);
+    box-shadow: 0 8px 25px var(--green-glow);
+}
+
+.toast-warning {
+    border-color: #febc2e;
+    box-shadow: 0 8px 25px rgba(254, 188, 46, 0.15);
+}
+
+.toast-danger {
+    border-color: #ff5f57;
+    box-shadow: 0 8px 25px rgba(255, 95, 87, 0.15);
+}
+
+.toast-icon { font-size: 16px; }
+.toast-msg { flex: 1; line-height: 1.4; }
+.toast-close {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+    transition: color 0.15s ease;
+}
+.toast-close:hover { color: #fff; }
+
+.toast-hiding {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ==========================================================================
+   MODAL ELEGANTE COM BACKDROP
+   ========================================================================== */
+.cq-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 10, 8, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modal-fade-in 0.2s ease-out;
+}
+
+.cq-modal-card {
+    background: #0d1714;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    animation: modal-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cq-modal-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.cq-modal-title {
+    margin: 0 0 10px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.cq-modal-desc {
+    margin: 0 0 24px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.cq-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+@keyframes modal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modal-scale-in {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

@@ -110,6 +110,7 @@ public class Database {
             stmt.execute("ALTER TABLE questoes ADD COLUMN IF NOT EXISTS categoria VARCHAR(100) DEFAULT 'Geral';");
             stmt.execute("ALTER TABLE questoes ADD COLUMN IF NOT EXISTS nivel VARCHAR(50) DEFAULT 'Fácil';");
             stmt.execute("ALTER TABLE questoes ADD COLUMN IF NOT EXISTS explicacao TEXT;");
+            stmt.execute("ALTER TABLE progresso_usuario ADD COLUMN IF NOT EXISTS etapa_maxima_desbloqueada INT NOT NULL DEFAULT 1;");
 
             seedModulo1(conn);
             seedModulo2(conn);
