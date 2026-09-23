@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${etapa.titulo} + ' — CodeQuest'">CodeQuest — Etapa</title>
+    <title th:text="${etapa.titulo} + ' — CodeQuest'">CodeQuest — Fase</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
         .etapa-container {
@@ -75,25 +75,25 @@
 
 <div class="etapa-container">
     <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted" style="display:inline-block; margin-bottom:1rem;">
-        &larr; Voltar para a trilha do módulo
+        &larr; Voltar para o Mapa do Mundo
     </a>
 
     <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
-        <span class="badge" th:text="'Etapa ' + ${etapa.numero} + ' de ' + ${totalEtapas}">Etapa 1 de 5</span>
-        <span class="section-label" style="margin:0;" th:text="${modulo.titulo}">Módulo 01</span>
+        <span class="badge" th:text="'Fase ' + ${etapa.numero} + ' de ' + ${totalEtapas}">Fase 1 de 5</span>
+        <span class="section-label" style="margin:0;" th:text="${modulo.titulo}">Mundo 01</span>
     </div>
 
     <h1 class="auth-title" style="margin-bottom: 1rem;" th:text="${etapa.titulo}">O que é Lógica de Programação?</h1>
 
-    <!-- Card de Objetivo -->
+    <!-- Card de Missão da Fase -->
     <div class="objective-card" th:if="${etapa.objetivo != null}">
-        <div class="objective-title">&#127919; Objetivo da Etapa</div>
-        <div style="color: #f3f4f6; font-size: 1rem;" th:text="${etapa.objetivo}">Objetivo...</div>
+        <div class="objective-title">// Missão da Fase</div>
+        <div style="color: #f3f4f6; font-size: 1rem;" th:text="${etapa.objetivo}">Missão...</div>
     </div>
 
     <!-- Texto de Explicação -->
     <div class="explanation-text" th:text="${etapa.explicacao}">
-        Explicação teórica da etapa...
+        Explicação teórica da fase...
     </div>
 
     <!-- Caixa de Exemplo / Código Estilo Terminal -->
@@ -110,30 +110,30 @@
         </div>
     </div>
 
-    <!-- Navegação entre Etapas -->
+    <!-- Navegação entre Fases -->
     <div class="nav-buttons">
         <div>
             <a th:if="${etapaAnterior != null}"
                th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapaAnterior}}"
                class="btn btn-secondary">
-                &larr; Etapa Anterior
+                &larr; Fase Anterior
             </a>
         </div>
 
         <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted">
-            Trilha do Módulo
+            Mapa do Mundo
         </a>
 
         <div>
             <a th:if="${proximaEtapa != null}"
                th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${proximaEtapa}}"
                class="btn btn-primary">
-                Próxima Etapa &rarr;
+                Próxima Fase &rarr;
             </a>
             <a th:unless="${proximaEtapa != null}"
                th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}"
                class="btn btn-primary" style="background: var(--green, #00ff88); color: #000;">
-                &#127942; Ir para Quiz Final
+                Desafio Final &rarr;
             </a>
         </div>
     </div>

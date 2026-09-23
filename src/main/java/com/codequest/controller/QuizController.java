@@ -47,7 +47,11 @@ public class QuizController {
                 return;
             }
 
-            ctx.render("quiz.html", Map.of("modulo", modulo));
+            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
+            ctx.render("quiz.html", Map.of(
+                    "modulo", modulo,
+                    "resumoJogador", resumoJogador
+            ));
         } catch (NoSuchElementException | NumberFormatException e) {
             ctx.status(404).result("Módulo não encontrado");
         }

@@ -6,6 +6,7 @@ import com.codequest.controller.ModuloController;
 import com.codequest.controller.QuestaoController;
 import com.codequest.controller.QuizController;
 import com.codequest.service.ModuloService;
+import com.codequest.service.ProgressoService;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 import org.thymeleaf.TemplateEngine;
@@ -63,7 +64,14 @@ public class App {
         app.get("/cadastro", ctx -> ctx.render("login.html", Map.of("cadastro", true)));
 
         // Página de módulos e navegação de etapas
-        app.get("/modulos", ctx -> ctx.render("modulos.html", Map.of("modulos", moduloService.listar())));
+        ProgressoService progressoService = new ProgressoService();
+        app.get("/modulos", ctx -> {
+            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+            ctx.render("modulos.html", Map.of(
+                    "modulos", moduloService.listar(),
+                    "resumoJogador", progressoService.obterResumoJogador(usuarioId)
+            ));
+        });
         app.get("/modulos/{id}", etapaController::verModuloDetails);
         app.get("/modulos/{moduloId}/etapas/{numero}", etapaController::verEtapa);
 

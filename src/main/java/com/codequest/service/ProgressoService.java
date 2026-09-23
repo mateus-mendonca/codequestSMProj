@@ -44,4 +44,8 @@ public class ProgressoService {
         int novaEtapaLiberada = Math.min(etapaAtual + 1, totalEtapas + 1);
         repository.atualizarEtapaMaxima(usuarioId, moduloId, novaEtapaLiberada);
     }
+
+    public com.codequest.model.ResumoJogadorDTO obterResumoJogador(String usuarioId) {
+        return repository.obterResumoJogador(usuarioId);
+    }
 }

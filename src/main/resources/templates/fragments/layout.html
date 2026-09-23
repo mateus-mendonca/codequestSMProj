@@ -19,15 +19,36 @@
             <span></span>
         </button>
     </div>
-    <nav class="breadcrumb">
-        <a href="/login" th:classappend="${active == 'auth'} ? 'crumb-active'">Auth</a>
-        <span class="crumb-sep">&gt;</span>
-        <a href="/modulos" th:classappend="${active == 'modulos'} ? 'crumb-active'">Módulos</a>
-        <span class="crumb-sep">&gt;</span>
-        <span th:classappend="${active == 'conteudo'} ? 'crumb-active'">Conteúdo</span>
-        <span class="crumb-sep">&gt;</span>
-        <span th:classappend="${active == 'quiz'} ? 'crumb-active'">Quiz</span>
-    </nav>
+    
+    <div class="navbar-center-area">
+        <nav class="breadcrumb">
+            <a href="/login" th:classappend="${active == 'auth'} ? 'crumb-active'">Auth</a>
+            <span class="crumb-sep">&gt;</span>
+            <a href="/modulos" th:classappend="${active == 'modulos'} ? 'crumb-active'">Mundos</a>
+            <span class="crumb-sep">&gt;</span>
+            <span th:classappend="${active == 'conteudo'} ? 'crumb-active'">Conteúdo</span>
+            <span class="crumb-sep">&gt;</span>
+            <span th:classappend="${active == 'quiz'} ? 'crumb-active'">Quiz</span>
+        </nav>
+    </div>
+
+    <!-- HUD do Jogador (XP, Fases Concluídas, Mundos) -->
+    <div class="player-hud" th:if="${resumoJogador != null}">
+        <div class="hud-item" title="XP Acumulado">
+            <span class="hud-label">XP</span>
+            <span class="hud-value" th:text="${resumoJogador.xpTotal}">0</span>
+        </div>
+        <div class="hud-separator">|</div>
+        <div class="hud-item" title="Fases Concluídas">
+            <span class="hud-label">FASES</span>
+            <span class="hud-value" th:text="${resumoJogador.fasesConcluidas}">0</span>
+        </div>
+        <div class="hud-separator">|</div>
+        <div class="hud-item" title="Mundos Conquistados">
+            <span class="hud-label">MUNDOS</span>
+            <span class="hud-value" th:text="${resumoJogador.mundosConquistados}">0</span>
+        </div>
+    </div>
 </header>
 
 <footer th:fragment="footer" class="footer">

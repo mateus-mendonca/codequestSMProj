@@ -39,12 +39,14 @@ public class EtapaController {
             String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
             int etapaMaxima = progressoService.obterEtapaMaximaDesbloqueada(usuarioId, moduloId);
             boolean quizDesbloqueado = progressoService.podeAcessarQuiz(usuarioId, moduloId, etapas.size());
+            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
 
             Map<String, Object> model = new HashMap<>();
             model.put("modulo", modulo);
             model.put("etapas", etapas);
             model.put("etapaMaxima", etapaMaxima);
             model.put("quizDesbloqueado", quizDesbloqueado);
+            model.put("resumoJogador", resumoJogador);
 
             ctx.render("modulo-detalhes.html", model);
         } catch (NoSuchElementException | NumberFormatException e) {
@@ -75,6 +77,7 @@ public class EtapaController {
 
             int etapaMaximaAtual = progressoService.obterEtapaMaximaDesbloqueada(usuarioId, moduloId);
             boolean quizDesbloqueado = progressoService.podeAcessarQuiz(usuarioId, moduloId, todasEtapas.size());
+            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
 
             Map<String, Object> model = new HashMap<>();
             model.put("modulo", modulo);
@@ -84,6 +87,7 @@ public class EtapaController {
             model.put("proximaEtapa", (numero < todasEtapas.size()) ? numero + 1 : null);
             model.put("etapaMaxima", etapaMaximaAtual);
             model.put("quizDesbloqueado", quizDesbloqueado);
+            model.put("resumoJogador", resumoJogador);
 
             ctx.render("etapa-detalhes.html", model);
         } catch (NoSuchElementException | NumberFormatException e) {

@@ -70,6 +70,21 @@ public class ProgressoServiceTest {
         assertTrue(progressoService.podeAcessarQuiz("aluno_veterano", 1, 5));
     }
 
+    @Test
+    @DisplayName("Deve calcular resumo do jogador com base no histórico de progresso")
+    public void testObterResumoJogador() {
+        ProgressoUsuario p1 = new ProgressoUsuario(1, "aluno_resumo", 1, 150, 3, true, true, true, 1, 4);
+        ProgressoUsuario p2 = new ProgressoUsuario(2, "aluno_resumo", 2, 50, 1, false, false, false, 1, 2);
+        stubRepository.dados.put("aluno_resumo:1", p1);
+        stubRepository.dados.put("aluno_resumo:2", p2);
+
+        com.codequest.model.ResumoJogadorDTO resumo = progressoService.obterResumoJogador("aluno_resumo");
+        assertNotNull(resumo);
+        assertEquals(200, resumo.getXpTotal());
+        assertEquals(4, resumo.getFasesConcluidas()); // (4 - 1) + (2 - 1) = 3 + 1 = 4
+        assertEquals(1, resumo.getMundosConquistados());
+    }
+
     private static class StubProgressoRepository extends ProgressoRepository {
         public Map<String, ProgressoUsuario> dados = new HashMap<>();
 
@@ -90,6 +105,25 @@ public class ProgressoServiceTest {
         public ProgressoUsuario saveOrUpdate(ProgressoUsuario progresso) {
             dados.put(progresso.getUsuarioId() + ":" + progresso.getModuloId(), progresso);
             return progresso;
+        }
+
+        @Override
+        public com.codequest.model.ResumoJogadorDTO obterResumoJogador(String usuarioId) {
+            int xp = 0;
+            int fases = 0;
+            int mundos = 0;
+            for (ProgressoUsuario p : dados.values()) {
+                if (p.getUsuarioId().equals(usuarioId)) {
+                    xp += p.getXpTotal();
+                    if (p.getEtapaMaximaDesbloqueada() > 1) {
+                        fases += (p.getEtapaMaximaDesbloqueada() - 1);
+                    }
+                    if (p.isConcluido()) {
+                        mundos++;
+                    }
+                }
+            }
+            return new com.codequest.model.ResumoJogadorDTO(xp, fases, mundos);
         }
     }
 }

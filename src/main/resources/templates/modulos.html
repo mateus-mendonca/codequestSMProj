@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeQuest — Escolha um módulo</title>
+    <title>CodeQuest — Escolha um Mundo</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -11,8 +11,8 @@
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
 <div class="modulos-wrapper">
-    <div class="section-label">// TRILHA DE APRENDIZADO</div>
-    <h1 class="auth-title" style="margin-bottom:0;">Escolha um módulo</h1>
+    <div class="section-label">// MAPA DE MUNDOS</div>
+    <h1 class="auth-title" style="margin-bottom:0;">Escolha um Mundo</h1>
 
     <div class="modulos-trail">
         <a th:each="modulo : ${modulos}"
@@ -21,22 +21,22 @@
            th:classappend="${!modulo.disponivel} ? 'locked'"
            style="text-decoration: none; color: inherit; display: block;">
 
-            <span th:if="${modulo.disponivel}" class="module-available-badge">Disponível</span>
+            <span th:if="${modulo.disponivel}" class="module-available-badge">Desbloqueado</span>
             <span th:unless="${modulo.disponivel}" class="module-lock-badge">Em desenvolvimento</span>
 
             <div class="module-icon">&lt;/&gt;</div>
-            <div class="module-number" th:text="'Módulo ' + ${#numbers.formatInteger(modulo.numero, 2)}">Módulo 01</div>
+            <div class="module-number" th:text="'Mundo ' + ${#numbers.formatInteger(modulo.numero, 2)}">Mundo 01</div>
             <div class="module-title" th:text="${modulo.titulo}">Título</div>
             <div class="module-desc" th:text="${modulo.descricao}">Descrição</div>
 
             <div class="module-meta" th:if="${modulo.disponivel}">
-                <span th:text="${modulo.topicos} + ' etapas de aprendizado'">5 etapas</span>
-                <span style="color: var(--green); font-weight: 600;">Iniciar &rarr;</span>
+                <span th:text="${modulo.topicos} + ' fases'">5 fases</span>
+                <span style="color: var(--green); font-weight: 600;">Explorar &rarr;</span>
             </div>
         </a>
 
         <p th:if="${#lists.isEmpty(modulos)}" class="footer-muted">
-            Nenhum módulo disponível no momento.
+            Nenhum mundo disponível no momento.
         </p>
     </div>
 </div>

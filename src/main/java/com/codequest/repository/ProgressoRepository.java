@@ -92,6 +92,41 @@ public class ProgressoRepository {
         return progresso;
     }
 
+    public com.codequest.model.ResumoJogadorDTO obterResumoJogador(String usuarioId) {
+        if (usuarioId == null || usuarioId.isBlank()) {
+            return new com.codequest.model.ResumoJogadorDTO(0, 0, 0);
+        }
+
+        String sql = """
+                SELECT 
+                    COALESCE(SUM(xp_total), 0) AS total_xp,
+                    COALESCE(SUM(CASE WHEN etapa_maxima_desbloqueada > 1 THEN etapa_maxima_desbloqueada - 1 ELSE 0 END), 0) AS total_fases,
+                    COALESCE(COUNT(CASE WHEN concluido = true THEN 1 END), 0) AS total_mundos
+                FROM progresso_usuario 
+                WHERE usuario_id = ?
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuarioId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new com.codequest.model.ResumoJogadorDTO(
+                            rs.getInt("total_xp"),
+                            rs.getInt("total_fases"),
+                            rs.getInt("total_mundos")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar resumo do jogador", e);
+        }
+
+        return new com.codequest.model.ResumoJogadorDTO(0, 0, 0);
+    }
+
     private ProgressoUsuario map(ResultSet rs) throws SQLException {
         int etapaMaxima = 1;
         try {

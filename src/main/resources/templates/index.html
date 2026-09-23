@@ -1,80 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest — Aprenda a programar com prática</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
-<header th:replace="~{fragments/layout :: navHome}"></header>
+    <header th:replace="~{fragments/layout :: navHome}"></header>
 
-<section class="hero">
-    <div class="hero-content">
-        <span class="badge">&#9889; Módulo 1: Lógica de Programação disponível</span>
+    <section class="hero">
+        <div class="hero-content">
+            <span class="badge">[DISPONÍVEL] Mundo 1: Lógica de Programação</span>
 
-        <h1 class="hero-title">
-            Aprenda a<br>
-            <span class="accent">programar</span><br>
-            com prática.
-        </h1>
+            <h1 class="hero-title">
+                Aprenda a<br>
+                <span class="accent">programar</span><br>
+                com prática.
+            </h1>
 
-        <p class="hero-text">
-            CodeQuest combina conteúdo estruturado com quizzes interativos para
-            fixar conceitos de programação de forma progressiva.
-        </p>
+            <p class="hero-text">
+                CodeQuest combina fases de conteúdo estruturado com desafios finais interativos para
+                desenvolver raciocínio lógico e habilidades de código.
+            </p>
 
-        <div class="hero-actions">
-            <a href="/login" class="btn btn-primary">Começar agora &rarr;</a>
-            <a href="/modulos" class="btn btn-secondary">Ver módulos</a>
+            <div class="hero-actions">
+                <a href="/login" class="btn btn-primary">Começar agora &rarr;</a>
+                <a href="/modulos" class="btn btn-secondary">Ver Mundos</a>
+            </div>
         </div>
-    </div>
 
-    <div class="terminal">
-        <div class="terminal-bar">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
-            <span class="terminal-filename">quiz.cq</span>
+        <div class="terminal">
+            <div class="terminal-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="terminal-filename">quiz.cq</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-label">// Questão</div>
+                <div class="terminal-question">Qual tipo de dado armazena 36.5?</div>
+
+                <div class="option"><span class="key">A</span> INTEIRO</div>
+                <div class="option"><span class="key">B</span> TEXTO</div>
+                <div class="option"><span class="key">C</span> LÓGICO</div>
+                <div class="option correct"><span class="key">&#9989;</span> REAL</div>
+
+                <div class="terminal-feedback"><span class="bar"></span> Correto!</div>
+            </div>
         </div>
-        <div class="terminal-body">
-            <div class="terminal-label">// Questão</div>
-            <div class="terminal-question">Qual tipo de dado armazena 36.5?</div>
+    </section>
 
-            <div class="option"><span class="key">A</span> INTEIRO</div>
-            <div class="option"><span class="key">B</span> TEXTO</div>
-            <div class="option"><span class="key">C</span> LÓGICO</div>
-            <div class="option correct"><span class="key">&#9989;</span> REAL</div>
+    <section class="section">
+        <div class="section-label">// COMO FUNCIONA</div>
 
-            <div class="terminal-feedback"><span class="bar"></span> Correto!</div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">[1]</div>
+                <div class="feature-title">01 — Fases</div>
+                <div class="feature-text">Avance passo a passo pelo mapa de cada mundo com explicações práticas e
+                    diretas.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[2]</div>
+                <div class="feature-title">02 — Desafio Final</div>
+                <div class="feature-text">Encare o Quiz Final de cada Mundo com vidas limitadas para testar seu domínio.
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[3]</div>
+                <div class="feature-title">03 — Conquistas</div>
+                <div class="feature-text">Acumule XP, vença mundos e desbloqueie novos territórios de conhecimento.
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section">
-    <div class="section-label">// COMO FUNCIONA</div>
-
-    <div class="feature-grid">
-        <div class="feature-card">
-            <div class="feature-icon">&#128214;</div>
-            <div class="feature-title">01 — Conteúdo</div>
-            <div class="feature-text">Leia o material do módulo com exemplos em pseudocódigo e explicações diretas.</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">&lt;/&gt;</div>
-            <div class="feature-title">02 — Quiz</div>
-            <div class="feature-text">Responda perguntas com 3 vidas. Erre demais e o quiz é reiniciado.</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#127942;</div>
-            <div class="feature-title">03 — Progresso</div>
-            <div class="feature-text">Conclua o quiz sem perder todas as vidas para desbloquear o próximo módulo.</div>
-        </div>
-    </div>
-</section>
-
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
 
 </body>
+
 </html>
