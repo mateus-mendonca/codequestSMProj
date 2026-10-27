@@ -31,18 +31,40 @@ public class ProgressoRepository {
         return Optional.empty();
     }
 
+    public void atualizarEtapaMaxima(String usuarioId, int moduloId, int etapaNumero) {
+        String sql = """
+                INSERT INTO progresso_usuario
+                    (usuario_id, modulo_id, etapa_maxima_desbloqueada)
+                VALUES (?, ?, ?)
+                ON CONFLICT (usuario_id, modulo_id) DO UPDATE SET
+                    etapa_maxima_desbloqueada = GREATEST(progresso_usuario.etapa_maxima_desbloqueada, EXCLUDED.etapa_maxima_desbloqueada);
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuarioId);
+            stmt.setInt(2, moduloId);
+            stmt.setInt(3, etapaNumero);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar etapa máxima do usuário", e);
+        }
+    }
+
     public ProgressoUsuario saveOrUpdate(ProgressoUsuario progresso) {
         String sql = """
                 INSERT INTO progresso_usuario
-                    (usuario_id, modulo_id, xp_total, estrelas, concluido, nota_maxima, sem_perder_vidas, tentativas)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    (usuario_id, modulo_id, xp_total, estrelas, concluido, nota_maxima, sem_perder_vidas, tentativas, etapa_maxima_desbloqueada)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT (usuario_id, modulo_id) DO UPDATE SET
                     xp_total = GREATEST(progresso_usuario.xp_total, EXCLUDED.xp_total),
                     estrelas = GREATEST(progresso_usuario.estrelas, EXCLUDED.estrelas),
                     concluido = EXCLUDED.concluido OR progresso_usuario.concluido,
                     nota_maxima = EXCLUDED.nota_maxima OR progresso_usuario.nota_maxima,
                     sem_perder_vidas = EXCLUDED.sem_perder_vidas OR progresso_usuario.sem_perder_vidas,
-                    tentativas = progresso_usuario.tentativas + 1
+                    tentativas = progresso_usuario.tentativas + 1,
+                    etapa_maxima_desbloqueada = GREATEST(progresso_usuario.etapa_maxima_desbloqueada, EXCLUDED.etapa_maxima_desbloqueada)
                 RETURNING id;
                 """;
 
@@ -57,6 +79,7 @@ public class ProgressoRepository {
             stmt.setBoolean(6, progresso.isNotaMaxima());
             stmt.setBoolean(7, progresso.isSemPerderVidas());
             stmt.setInt(8, 1);
+            stmt.setInt(9, progresso.getEtapaMaximaDesbloqueada());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -69,7 +92,51 @@ public class ProgressoRepository {
         return progresso;
     }
 
+    public com.codequest.model.ResumoJogadorDTO obterResumoJogador(String usuarioId) {
+        if (usuarioId == null || usuarioId.isBlank()) {
+            return new com.codequest.model.ResumoJogadorDTO(0, 0, 0);
+        }
+
+        String sql = """
+                SELECT 
+                    COALESCE(SUM(xp_total), 0) AS total_xp,
+                    COALESCE(SUM(CASE WHEN etapa_maxima_desbloqueada > 1 THEN etapa_maxima_desbloqueada - 1 ELSE 0 END), 0) AS total_fases,
+                    COALESCE(COUNT(CASE WHEN concluido = true THEN 1 END), 0) AS total_mundos
+                FROM progresso_usuario 
+                WHERE usuario_id = ?
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuarioId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new com.codequest.model.ResumoJogadorDTO(
+                            rs.getInt("total_xp"),
+                            rs.getInt("total_fases"),
+                            rs.getInt("total_mundos")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar resumo do jogador", e);
+        }
+
+        return new com.codequest.model.ResumoJogadorDTO(0, 0, 0);
+    }
+
     private ProgressoUsuario map(ResultSet rs) throws SQLException {
+        int etapaMaxima = 1;
+        try {
+            etapaMaxima = rs.getInt("etapa_maxima_desbloqueada");
+            if (etapaMaxima < 1) {
+                etapaMaxima = 1;
+            }
+        } catch (SQLException ignored) {
+        }
+
         return new ProgressoUsuario(
                 rs.getInt("id"),
                 rs.getString("usuario_id"),
@@ -79,7 +146,8 @@ public class ProgressoRepository {
                 rs.getBoolean("concluido"),
                 rs.getBoolean("nota_maxima"),
                 rs.getBoolean("sem_perder_vidas"),
-                rs.getInt("tentativas")
+                rs.getInt("tentativas"),
+                etapaMaxima
         );
     }
 }

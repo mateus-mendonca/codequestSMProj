@@ -3,7 +3,9 @@ package com.codequest.controller;
 import com.codequest.model.Modulo;
 import com.codequest.model.QuizQuestionDTO;
 import com.codequest.model.QuizResultDTO;
+import com.codequest.service.EtapaService;
 import com.codequest.service.ModuloService;
+import com.codequest.service.ProgressoService;
 import com.codequest.service.QuizService;
 import io.javalin.http.Context;
 
@@ -16,23 +18,40 @@ public class QuizController {
 
     private final ModuloService moduloService;
     private final QuizService quizService;
+    private final ProgressoService progressoService;
+    private final EtapaService etapaService;
 
     public QuizController() {
         this.moduloService = new ModuloService();
         this.quizService = new QuizService();
+        this.progressoService = new ProgressoService();
+        this.etapaService = new EtapaService();
     }
 
-    public QuizController(ModuloService moduloService, QuizService quizService) {
+    public QuizController(ModuloService moduloService, QuizService quizService, ProgressoService progressoService, EtapaService etapaService) {
         this.moduloService = moduloService;
         this.quizService = quizService;
+        this.progressoService = progressoService;
+        this.etapaService = etapaService;
     }
 
     public void verQuizPage(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
             Modulo modulo = moduloService.buscar(moduloId);
+            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
 
-            ctx.render("quiz.html", Map.of("modulo", modulo));
+            int totalEtapas = etapaService.listarPorModulo(moduloId).size();
+            if (!progressoService.podeAcessarQuiz(usuarioId, moduloId, totalEtapas)) {
+                ctx.redirect("/modulos/" + moduloId + "?quizBloqueado=true");
+                return;
+            }
+
+            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
+            ctx.render("quiz.html", Map.of(
+                    "modulo", modulo,
+                    "resumoJogador", resumoJogador
+            ));
         } catch (NoSuchElementException | NumberFormatException e) {
             ctx.status(404).result("Módulo não encontrado");
         }
@@ -41,6 +60,14 @@ public class QuizController {
     public void obterQuestoes(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
+            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+
+            int totalEtapas = etapaService.listarPorModulo(moduloId).size();
+            if (!progressoService.podeAcessarQuiz(usuarioId, moduloId, totalEtapas)) {
+                ctx.status(403).result("O Quiz deste módulo ainda está bloqueado. Complete todas as etapas primeiro.");
+                return;
+            }
+
             List<QuizQuestionDTO> questoes = quizService.gerarQuizParaModulo(moduloId);
             ctx.json(questoes);
         } catch (Exception e) {

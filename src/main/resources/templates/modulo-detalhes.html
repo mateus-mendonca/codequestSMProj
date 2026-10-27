@@ -1,62 +1,169 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${modulo.titulo} + ' — CodeQuest'">CodeQuest — Módulo</title>
+    <title th:text="${modulo.titulo} + ' — CodeQuest'">CodeQuest — Mundo</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
-<header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
+    <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
-<div class="modulos-wrapper">
-    <a href="/modulos" class="nav-link-muted" style="display:inline-block; margin-bottom:1rem;">&larr; Voltar para módulos</a>
+    <div class="modulos-wrapper">
+        <a href="/modulos" class="nav-link-muted"
+            style="display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem;">
+            &larr; Voltar para Mundos
+        </a>
 
-    <div class="section-label" th:text="'// MÓDULO ' + ${#numbers.formatInteger(modulo.numero, 2)}">// MÓDULO 01</div>
-    <h1 class="auth-title" style="margin-bottom:0.5rem;" th:text="${modulo.titulo}">Introdução à Lógica de Programação</h1>
-    <p class="hero-text" style="margin-bottom:2rem; max-width:700px;" th:text="${modulo.descricao}">Descrição do módulo</p>
+        <div
+            style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div>
+                <div class="section-label"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon">
+                    <span th:text="'MUNDO ' + ${#numbers.formatInteger(modulo.numero, 2)}">MUNDO 01</span></div>
+                <h1 class="auth-title" style="margin-bottom:0.5rem; text-align: left;" th:text="${modulo.titulo}">
+                    Introdução à Lógica de Programação</h1>
+                <p class="hero-text" style="margin-bottom:0; max-width:700px; font-size: 16px;"
+                    th:text="${modulo.descricao}">Descrição temática do mundo e conteúdos explorados.</p>
+            </div>
+            <img th:src="@{/img/Sentado.png}" alt="Mascote estudando"
+                style="width: 90px; filter: drop-shadow(0 4px 10px rgba(36,201,139,0.2));" class="hide-mobile">
+        </div>
 
-    <div class="tree-container" style="background: var(--bg-card, #12181b); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
-        <h2 style="font-size: 1.1rem; color: var(--green, #00ff88); margin-bottom: 1.2rem; font-family: monospace;">
-            &#128194; TRILHA DE CONTEÚDO
-        </h2>
-
-        <div class="tree-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
-            <a th:each="etapa : ${etapas}"
-               th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapa.numero}}"
-               class="tree-item"
-               style="display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.2s;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-family: monospace; color: var(--green, #00ff88); font-weight: bold;"
-                          th:text="'Etapa ' + ${etapa.numero}">Etapa 1</span>
-                    <span style="font-weight: 500;" th:text="${etapa.titulo}">Título da Etapa</span>
-                </div>
-                <span class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">Acessar &rarr;</span>
-            </a>
-
-            <!-- Quiz Final -->
-            <a th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}" class="tree-item quiz-item"
-               style="display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.2rem; background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.2s;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-family: monospace; color: var(--green, #00ff88); font-weight: bold;">&#127942; Quiz Final</span>
-                    <span style="font-weight: 500;">Avaliação de fixação do Módulo</span>
-                </div>
-                <span class="btn btn-primary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; background: var(--green, #00ff88); color: #000;">
-                    Iniciar Quiz &rarr;
+        <!-- Mapa de Fases (Visual de nós com trilha em zigue-zague) -->
+        <div class="phase-map-card">
+            <div class="phase-map-header">
+                <span class="phase-map-tag"><img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> TRILHA DE APRENDIZADO</span>
+                <span class="phase-map-status">
+                    <img th:if="${quizDesbloqueado}" th:src="@{/img/sprites/icon-party.png}" alt="" class="sprite-icon">
+                    <img th:unless="${quizDesbloqueado}" th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon">
+                    <span th:text="${quizDesbloqueado} ? 'Desafio Final Desbloqueado!' : 'Trilha em Progresso'">Trilha em Progresso</span>
                 </span>
-            </a>
+            </div>
+
+            <div class="phase-map-track-vertical">
+                <!-- Iteração sobre as Fases -->
+                <div th:each="etapa, iterStat : ${etapas}" class="phase-row"
+                    th:classappend="${iterStat.index % 2 == 0} ? 'align-left' : 'align-right'">
+
+                    <!-- Conector curvo em SVG (Fase anterior -> Fase atual) -->
+                    <th:block th:if="${!iterStat.first}">
+                        <!-- Se iterStat.index é par: o nó atual está à ESQUERDA e veio da DIREITA -->
+                        <svg th:if="${iterStat.index % 2 == 0}" class="phase-curve-svg"
+                            th:classappend="${etapa.numero <= etapaMaxima} ? 'curve-active' : ''" viewBox="0 0 100 100"
+                            preserveAspectRatio="none">
+                            <path d="M 82,0 C 82,50 18,50 18,100" />
+                        </svg>
+
+                        <!-- Se iterStat.index é ímpar: o nó atual está à DIREITA e veio da ESQUERDA -->
+                        <svg th:if="${iterStat.index % 2 != 0}" class="phase-curve-svg"
+                            th:classappend="${etapa.numero <= etapaMaxima} ? 'curve-active' : ''" viewBox="0 0 100 100"
+                            preserveAspectRatio="none">
+                            <path d="M 18,0 C 18,50 82,50 82,100" />
+                        </svg>
+                    </th:block>
+
+                    <!-- Fase Concluída -->
+                    <a th:if="${etapa.numero < etapaMaxima}"
+                        th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapa.numero}}"
+                        class="phase-node completed"
+                        th:title="'Fase ' + ${etapa.numero} + ': ' + ${etapa.titulo} + ' (Concluída)'">
+                        <div class="phase-node-circle">
+                            <img th:src="@{/img/sprites/icon-party.png}" alt="Concluída" class="sprite-icon-md">
+                        </div>
+                        <div class="phase-node-info">
+                            <span class="phase-node-num" th:text="'Fase ' + ${etapa.numero}">Fase 1</span>
+                            <span class="phase-node-title" th:text="${etapa.titulo}">Título</span>
+                        </div>
+                    </a>
+
+                    <!-- Fase Atual -->
+                    <a th:if="${etapa.numero == etapaMaxima}"
+                        th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapa.numero}}"
+                        class="phase-node current"
+                        th:title="'Fase ' + ${etapa.numero} + ': ' + ${etapa.titulo} + ' (Fase Atual)'">
+                        <div class="phase-node-circle">
+                            <img th:src="@{/img/sprites/icon-rocket.png}" alt="Fase atual" class="sprite-icon-md">
+                        </div>
+                        <div class="phase-node-info">
+                            <span class="phase-node-num active-tag" th:text="'Fase ' + ${etapa.numero}">Fase 1</span>
+                            <span class="phase-node-title" th:text="${etapa.titulo}">Título</span>
+                        </div>
+                    </a>
+
+                    <!-- Fase Bloqueada -->
+                    <div th:if="${etapa.numero > etapaMaxima}" class="phase-node locked"
+                        th:title="'Fase ' + ${etapa.numero} + ' bloqueada'">
+                        <div class="phase-node-circle">
+                            <img th:src="@{/img/sprites/icon-lock.png}" alt="Bloqueada" class="sprite-icon-md">
+                        </div>
+                        <div class="phase-node-info">
+                            <span class="phase-node-num" th:text="'Fase ' + ${etapa.numero}">Fase 2</span>
+                            <span class="phase-node-title" th:text="${etapa.titulo}">Título</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nó do Boss / Desafio Final (Centralizado) -->
+                <div class="phase-row" style="align-items: center; padding-left: 0; padding-right: 0;">
+
+                    <!-- Se a última etapa foi ÍMPAR (ex: 5 fases): a Fase 5 ficou à ESQUERDA (x=18). Linha vai até o CENTRO (50) -->
+                    <svg th:if="${#lists.size(etapas) % 2 != 0}" class="phase-curve-svg"
+                        th:classappend="${quizDesbloqueado} ? 'curve-active' : ''" viewBox="0 0 100 100"
+                        preserveAspectRatio="none">
+                        <path d="M 18,0 C 18,50 50,50 50,100" />
+                    </svg>
+
+                    <!-- Se a última etapa foi PAR (ex: 4 fases): a Fase 4 ficou à DIREITA (x=82). Linha vai até o CENTRO (50) -->
+                    <svg th:if="${#lists.size(etapas) % 2 == 0}" class="phase-curve-svg"
+                        th:classappend="${quizDesbloqueado} ? 'curve-active' : ''" viewBox="0 0 100 100"
+                        preserveAspectRatio="none">
+                        <path d="M 82,0 C 82,50 50,50 50,100" />
+                    </svg>
+
+                    <!-- Quiz Desbloqueado -->
+                    <a th:if="${quizDesbloqueado}" th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}"
+                        class="phase-node boss-node unlocked" title="Desafio Final do Mundo">
+                        <div class="phase-node-circle">
+                            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Troféu do Boss" class="sprite-icon-lg">
+                        </div>
+                        <div class="phase-node-info">
+                            <span class="phase-node-num boss-tag"><img th:src="@{/img/sprites/icon-trophy.png}" alt="" class="sprite-icon-sm"> DESAFIO FINAL</span>
+                            <span class="phase-node-title">Quiz do Mundo</span>
+                        </div>
+                    </a>
+
+                    <!-- Quiz Bloqueado -->
+                    <div th:unless="${quizDesbloqueado}" class="phase-node boss-node locked"
+                        title="Complete todas as fases anteriores para desbloquear o Desafio Final">
+                        <div class="phase-node-circle">
+                            <img th:src="@{/img/sprites/icon-lock.png}" alt="Bloqueado" class="sprite-icon-lg">
+                        </div>
+                        <div class="phase-node-info">
+                            <span class="phase-node-num">DESAFIO FINAL</span>
+                            <span class="phase-node-title">Quiz Bloqueado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-map-footer-actions">
+                    <span class="footer-muted" style="font-size: 0.95rem; font-weight: 700;">
+                        <img th:src="@{/img/sprites/icon-bulb.png}" alt="Dica" class="sprite-icon"> Dica: Conclua cada fase para avançar pelo mapa e destravar o Desafio Final.
+                    </span>
+                    <a th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapaMaxima <= etapas.size() ? etapaMaxima : etapas.size()}}"
+                        class="btn btn-primary" style="padding: 14px 28px; font-size: 1.05rem;">
+                        <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Continuar Jornada
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div style="text-align: right;">
-        <a th:href="@{'/modulos/' + ${modulo.id} + '/etapas/1'}" class="btn btn-primary" style="padding: 0.8rem 1.8rem; font-size: 1rem;">
-            Começar Etapa 1 &rarr;
-        </a>
-    </div>
-</div>
-
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
 
 </body>
+
 </html>

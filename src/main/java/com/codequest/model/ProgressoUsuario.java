@@ -10,11 +10,17 @@ public class ProgressoUsuario {
     private boolean notaMaxima;
     private boolean semPerderVidas;
     private int tentativas;
+    private int etapaMaximaDesbloqueada = 1;
 
     public ProgressoUsuario() {}
 
     public ProgressoUsuario(Integer id, String usuarioId, int moduloId, int xpTotal, int estrelas,
                             boolean concluido, boolean notaMaxima, boolean semPerderVidas, int tentativas) {
+        this(id, usuarioId, moduloId, xpTotal, estrelas, concluido, notaMaxima, semPerderVidas, tentativas, 1);
+    }
+
+    public ProgressoUsuario(Integer id, String usuarioId, int moduloId, int xpTotal, int estrelas,
+                            boolean concluido, boolean notaMaxima, boolean semPerderVidas, int tentativas, int etapaMaximaDesbloqueada) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.moduloId = moduloId;
@@ -24,6 +30,7 @@ public class ProgressoUsuario {
         this.notaMaxima = notaMaxima;
         this.semPerderVidas = semPerderVidas;
         this.tentativas = tentativas;
+        this.etapaMaximaDesbloqueada = Math.max(1, etapaMaximaDesbloqueada);
     }
 
     public Integer getId() { return id; }
@@ -52,4 +59,9 @@ public class ProgressoUsuario {
 
     public int getTentativas() { return tentativas; }
     public void setTentativas(int tentativas) { this.tentativas = tentativas; }
+
+    public int getEtapaMaximaDesbloqueada() { return etapaMaximaDesbloqueada; }
+    public void setEtapaMaximaDesbloqueada(int etapaMaximaDesbloqueada) {
+        this.etapaMaximaDesbloqueada = Math.max(1, etapaMaximaDesbloqueada);
+    }
 }
