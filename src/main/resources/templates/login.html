@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeQuest — Entrar</title>
+    <title th:text="${cadastro != null && cadastro} ? 'CodeQuest — Criar Conta' : 'CodeQuest — Entrar'">CodeQuest — Entrar</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -11,33 +12,47 @@
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='auth')}"></header>
 
 <div class="auth-wrapper">
-    <div class="auth-label">// ACESSO</div>
-    <h1 class="auth-title">Bem-vindo de volta.</h1>
+    <img th:src="@{/img/Joinha.png}" alt="Mascote dando joinha" class="auth-mascot">
+    
+    <div class="section-label" style="text-align: center; margin-bottom: 6px;">
+        <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon">
+        <span th:text="${cadastro != null && cadastro} ? 'NOVO EXPLORADOR' : 'BEM-VINDO DE VOLTA'">BEM-VINDO DE VOLTA</span>
+    </div>
+    
+    <h1 class="auth-title" th:text="${cadastro != null && cadastro} ? 'Crie sua conta para salvar seu progresso!' : 'Pronto para continuar sua missão?'">
+        Pronto para continuar sua missão?
+    </h1>
 
     <form class="auth-card" method="post" th:action="@{/login}">
         <div class="field">
-            <label for="email">E-mail</label>
+            <label for="email"><img th:src="@{/img/sprites/icon-laptop.png}" alt="" class="sprite-icon-sm"> E-mail</label>
             <div class="input-wrap">
-                <span class="icon">&#9993;</span>
-                <input type="email" id="email" name="email" placeholder="dev@exemplo.com" required>
+                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required autofocus>
             </div>
         </div>
 
         <div class="field">
-            <label for="senha">Senha</label>
+            <label for="senha"><img th:src="@{/img/sprites/icon-lock.png}" alt="" class="sprite-icon-sm"> Senha</label>
             <div class="input-wrap">
-                <span class="icon">&#128274;</span>
                 <input type="password" id="senha" name="senha" placeholder="••••••••" required>
-                <span class="icon">&#128065;</span>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">&#8594;| Entrar</button>
+        <button type="submit" class="btn btn-primary btn-block">
+            <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon">
+            <span th:text="${cadastro != null && cadastro} ? 'Criar Conta e Começar' : 'Entrar na Aventura'">Entrar na Aventura</span>
+        </button>
     </form>
 
     <div class="auth-links">
-        Não tem conta? <a href="/cadastro">Cadastre-se</a>
-        <a href="/modulos" class="continue">Continuar sem conta &rarr;</a>
+        <span th:if="${cadastro == null || !cadastro}">
+            Ainda não tem conta? <a href="/cadastro">Cadastre-se gratuitamente</a>
+        </span>
+        <span th:if="${cadastro != null && cadastro}">
+            Já tem uma conta? <a href="/login">Fazer login</a>
+        </span>
+        <br>
+        <a href="/modulos" class="continue"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon"> Explorar os Mundos sem conta &rarr;</a>
     </div>
 </div>
 

@@ -1,9 +1,9 @@
 /**
- * CodeQuest - Efeitos Visuais, Interações, Toasts e Confirmações Modais
+ * CodeQuest - Efeitos Visuais, Interações, Toasts, Confirmações Modais e Animações
  */
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. EFEITO DE ONDA (RIPPLE EFFECT)
+    // 1. EFEITO DE ONDA TÁTIL (RIPPLE EFFECT)
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn, .btn-restart, .btn-next, .option-btn, button:not(.nav-toggle)');
         if (!btn) return;
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. SISTEMA DE TOAST NOTIFICATIONS
+    // 3. SISTEMA DE TOAST NOTIFICATIONS GAMIFICADAS
     window.showToast = function(message, type = 'info') {
         let container = document.getElementById('toast-container');
         if (!container) {
@@ -62,13 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         
-        let icon = 'ℹ️';
-        if (type === 'success') icon = '✨';
-        if (type === 'warning') icon = '🔒';
-        if (type === 'danger') icon = '⚠️';
+        let icon = '/img/sprites/icon-bulb.png';
+        if (type === 'success') icon = '/img/sprites/icon-party.png';
+        if (type === 'warning') icon = '/img/sprites/icon-lock.png';
+        if (type === 'danger') icon = '/img/sprites/icon-target.png';
 
         toast.innerHTML = `
-            <span class="toast-icon">${icon}</span>
+            <span class="toast-icon"><img src="${icon}" alt="" class="sprite-icon-md"></span>
             <span class="toast-msg">${message}</span>
             <span class="toast-close">&times;</span>
         `;
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.className = 'cq-modal-backdrop';
                 modal.innerHTML = `
                     <div class="cq-modal-card">
-                        <div class="cq-modal-icon">⚠️</div>
+                        <div class="cq-modal-icon"><img src="/img/sprites/icon-target.png" alt="Atenção" class="sprite-icon-lg"></div>
                         <h3 class="cq-modal-title">Confirmar Exclusão</h3>
                         <p class="cq-modal-desc">Você tem certeza que deseja excluir este registro? Essa ação não pode ser desfeita.</p>
                         <div class="cq-modal-actions">

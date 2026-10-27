@@ -69,8 +69,7 @@ public class App {
             String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
             ctx.render("modulos.html", Map.of(
                     "modulos", moduloService.listar(),
-                    "resumoJogador", progressoService.obterResumoJogador(usuarioId)
-            ));
+                    "resumoJogador", progressoService.obterResumoJogador(usuarioId)));
         });
         app.get("/modulos/{id}", etapaController::verModuloDetails);
         app.get("/modulos/{moduloId}/etapas/{numero}", etapaController::verEtapa);

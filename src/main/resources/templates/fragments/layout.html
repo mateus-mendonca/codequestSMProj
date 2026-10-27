@@ -1,61 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>fragments</title></head>
+
+<head>
+    <title>fragments</title>
+</head>
+
 <body>
 
-<!-- Navbar simples usada na home: apenas logo + link à direita -->
-<header th:fragment="navHome" class="navbar">
-    <a href="/" class="logo">&gt;_ <span>CodeQuest</span></a>
-    <a href="/modulos" class="nav-link-muted">Explorar sem conta &rarr;</a>
-</header>
+    <!-- Navbar simples usada na home: logo gamificado com mascote + botão de acesso -->
+    <header th:fragment="navHome" class="navbar">
+        <a href="/" class="logo">
+            <img th:src="@{/img/favicon.png}" alt="CodeQuest" class="logo-img">
+            <span>Code<b>Quest</b></span>
+        </a>
+        <a href="/modulos" class="nav-link-muted">Explorar sem conta &rarr;</a>
+    </header>
 
-<!-- Navbar com breadcrumb, usada nas páginas internas (login, módulos, etc) -->
-<header th:fragment="navBreadcrumb(active)" class="navbar">
-    <div class="navbar-brand-row">
-        <a href="/" class="logo">&gt;_ <span>CodeQuest</span></a>
-        <button class="nav-toggle" id="navToggle" aria-label="Abrir navegação" onclick="document.querySelector('.breadcrumb').classList.toggle('open')">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
-    
-    <div class="navbar-center-area">
-        <nav class="breadcrumb">
-            <a href="/login" th:classappend="${active == 'auth'} ? 'crumb-active'">Auth</a>
-            <span class="crumb-sep">&gt;</span>
-            <a href="/modulos" th:classappend="${active == 'modulos'} ? 'crumb-active'">Mundos</a>
-            <span class="crumb-sep">&gt;</span>
-            <span th:classappend="${active == 'conteudo'} ? 'crumb-active'">Conteúdo</span>
-            <span class="crumb-sep">&gt;</span>
-            <span th:classappend="${active == 'quiz'} ? 'crumb-active'">Quiz</span>
-        </nav>
-    </div>
+    <!-- Navbar com breadcrumb, usada nas páginas internas (login, módulos, etapas, etc) -->
+    <header th:fragment="navBreadcrumb(active)" class="navbar">
+        <div class="navbar-brand-row">
+            <a href="/" class="logo">
+                <img th:src="@{/img/favicon.png}" alt="CodeQuest" class="logo-img">
+                <span>Code<b>Quest</b></span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir navegação"
+                onclick="document.querySelector('.breadcrumb').classList.toggle('open')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
 
-    <!-- HUD do Jogador (XP, Fases Concluídas, Mundos) -->
-    <div class="player-hud" th:if="${resumoJogador != null}">
-        <div class="hud-item" title="XP Acumulado">
-            <span class="hud-label">XP</span>
-            <span class="hud-value" th:text="${resumoJogador.xpTotal}">0</span>
+        <div class="navbar-center-area">
+            <nav class="breadcrumb">
+                <a href="/login" th:classappend="${active == 'auth'} ? 'crumb-active'">Auth</a>
+                <span class="crumb-sep">&gt;</span>
+                <a href="/modulos" th:classappend="${active == 'modulos'} ? 'crumb-active'">Mundos</a>
+                <span class="crumb-sep">&gt;</span>
+                <span th:classappend="${active == 'conteudo'} ? 'crumb-active'">Conteúdo</span>
+                <span class="crumb-sep">&gt;</span>
+                <span th:classappend="${active == 'quiz'} ? 'crumb-active'">Quiz</span>
+            </nav>
         </div>
-        <div class="hud-separator">|</div>
-        <div class="hud-item" title="Fases Concluídas">
-            <span class="hud-label">FASES</span>
-            <span class="hud-value" th:text="${resumoJogador.fasesConcluidas}">0</span>
-        </div>
-        <div class="hud-separator">|</div>
-        <div class="hud-item" title="Mundos Conquistados">
-            <span class="hud-label">MUNDOS</span>
-            <span class="hud-value" th:text="${resumoJogador.mundosConquistados}">0</span>
-        </div>
-    </div>
-</header>
 
-<footer th:fragment="footer" class="footer">
-    <span>CodeQuest &copy; 2026</span>
-    <span class="footer-muted">Protótipo educacional</span>
-    <script th:src="@{/js/main.js}"></script>
-</footer>
+        <!-- HUD do Jogador (XP, Fases Concluídas, Mundos) com sprites do jogo -->
+        <div class="player-hud" th:if="${resumoJogador != null}">
+            <div class="hud-item" title="XP Acumulado">
+                <img th:src="@{/img/sprites/icon-xp.png}" alt="XP" class="sprite-icon">
+                <span class="hud-label">XP</span>
+                <span class="hud-value" th:text="${resumoJogador.xpTotal}">0</span>
+            </div>
+            <div class="hud-separator">|</div>
+            <div class="hud-item" title="Fases Concluídas">
+                <img th:src="@{/img/sprites/icon-target.png}" alt="Fases" class="sprite-icon">
+                <span class="hud-label">FASES</span>
+                <span class="hud-value" th:text="${resumoJogador.fasesConcluidas}">0</span>
+            </div>
+            <div class="hud-separator">|</div>
+            <div class="hud-item" title="Mundos Conquistados">
+                <img th:src="@{/img/sprites/icon-world.png}" alt="Mundos" class="sprite-icon">
+                <span class="hud-label">MUNDOS</span>
+                <span class="hud-value" th:text="${resumoJogador.mundosConquistados}">0</span>
+            </div>
+        </div>
+    </header>
+
+    <footer th:fragment="footer" class="footer">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-weight:900; color:var(--primary); display:inline-flex; align-items:center; gap:6px;"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> CodeQuest</span>
+            <span>&copy; 2026</span>
+        </div>
+        <span class="footer-muted">Plataforma Educacional Gamificada de Programação</span>
+        <script th:src="@{/js/main.js}"></script>
+    </footer>
 
 </body>
+
 </html>

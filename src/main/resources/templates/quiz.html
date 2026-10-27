@@ -4,37 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="'Quiz Final: ' + ${modulo.titulo} + ' — CodeQuest'">CodeQuest — Quiz Final</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --quiz-bg: #0b0f17;
-            --card-bg: rgba(22, 27, 34, 0.75);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --accent-green: #00ff88;
-            --accent-green-glow: rgba(0, 255, 136, 0.35);
-            --accent-purple: #a78bfa;
-            --accent-cyan: #38bdf8;
-            --danger-red: #ff4757;
-            --gold-yellow: #ffd700;
+            --quiz-bg: var(--bg-main, #F4F8F6);
+            --card-bg: #FFFFFF;
+            --card-border: var(--border, #DDE7E2);
+            --accent-green: var(--primary, #24C98B);
+            --accent-green-dark: #179b68;
+            --accent-green-glow: rgba(36, 201, 139, 0.25);
+            --accent-purple: #8B5CF6;
+            --accent-cyan: #3B82F6;
+            --danger-red: #EF4444;
+            --gold-yellow: #F59E0B;
         }
 
         body {
             background-color: var(--quiz-bg);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 40%);
-            font-family: 'Outfit', sans-serif;
-            color: #e6edf3;
+                radial-gradient(circle at 10% 20%, rgba(36, 201, 139, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
+            font-family: var(--font-main, 'Nunito', sans-serif);
+            color: var(--text-primary, #1F332A);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         .quiz-wrapper {
-            max-width: 850px;
+            max-width: 860px;
             margin: 2rem auto;
             padding: 0 1.5rem;
             flex: 1;
@@ -46,66 +45,70 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            padding: 1rem 1.5rem;
-            border-radius: 16px;
+            background: #FFFFFF;
+            border: 2px solid var(--card-border);
+            padding: 1.2rem 1.8rem;
+            border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 16px rgba(28, 48, 38, 0.06);
         }
 
         .lives-container {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            font-size: 1.4rem;
+            gap: 0.5rem;
+            font-size: 1.6rem;
         }
 
         .heart {
+            width: 32px;
+            height: 32px;
+            display: inline-block;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
         }
 
         .heart.lost {
-            filter: grayscale(1) opacity(0.3);
-            transform: scale(0.8);
+            filter: grayscale(1) opacity(0.35);
+            transform: scale(0.85);
         }
 
         .progress-track {
             flex: 1;
-            max-width: 320px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
+            max-width: 340px;
+            height: 14px;
+            background: var(--bg-soft, #EDF4F0);
+            border-radius: 999px;
             margin: 0 1.5rem;
             overflow: hidden;
             position: relative;
+            border: 1px solid var(--card-border);
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #00ff88, #38bdf8);
-            border-radius: 20px;
+            background: linear-gradient(90deg, #24C98B, #3B82F6);
+            border-radius: 999px;
             transition: width 0.4s ease;
-            box-shadow: 0 0 12px var(--accent-green-glow);
+            box-shadow: 0 2px 8px var(--accent-green-glow);
         }
 
         .question-counter {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.95rem;
-            color: #8b949e;
-            font-weight: 700;
+            font-family: var(--font-main, 'Nunito', sans-serif);
+            font-size: 1rem;
+            color: var(--text-secondary, #526E61);
+            font-weight: 800;
         }
 
         /* Question Card */
         .question-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 2.2rem;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            background: #FFFFFF;
+            border: 2px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(28, 48, 38, 0.08);
             position: relative;
             animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -117,38 +120,38 @@
 
         .question-meta {
             display: flex;
-            gap: 0.6rem;
-            margin-bottom: 1.2rem;
+            gap: 0.8rem;
+            margin-bottom: 1.4rem;
         }
 
         .badge-cat {
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            background: var(--accent-blue-light, #eff6ff);
+            color: var(--accent-blue-dark, #2563eb);
+            border: 1.5px solid rgba(59, 130, 246, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .badge-lvl {
-            background: rgba(167, 139, 250, 0.15);
-            color: var(--accent-purple);
-            border: 1px solid rgba(167, 139, 250, 0.3);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            background: var(--accent-purple-light, #f5f3ff);
+            color: var(--accent-purple, #8B5CF6);
+            border: 1.5px solid rgba(139, 92, 246, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 800;
         }
 
         .question-title {
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.45rem;
+            font-weight: 800;
             line-height: 1.5;
             margin-bottom: 2rem;
-            color: #f0f6fc;
+            color: var(--text-primary, #1F332A);
         }
 
         /* Options Grid */
@@ -161,238 +164,279 @@
         .option-btn {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 1.1rem 1.4rem;
-            color: #e6edf3;
+            background: #FFFFFF;
+            border: 2px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            color: var(--text-primary, #1F332A);
             font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 700;
             text-align: left;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 3px 0 var(--border-dark, #C6D6CE);
         }
 
         .option-btn:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.02) translateX(4px);
+            background: var(--bg-soft, #EDF4F0);
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 var(--border-dark, #C6D6CE);
         }
 
         .option-key {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 34px;
-            height: 34px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            font-family: 'Fira Code', monospace;
-            font-weight: 700;
-            font-size: 0.9rem;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-soft, #EDF4F0);
+            border-radius: 10px;
+            font-family: var(--font-code, monospace);
+            font-weight: 800;
+            font-size: 1rem;
             margin-right: 1rem;
-            color: #8b949e;
+            color: var(--text-secondary, #526E61);
             transition: all 0.2s ease;
         }
 
         .option-btn:hover:not(:disabled) .option-key {
             background: var(--accent-green);
-            color: #000;
+            color: #FFFFFF;
         }
 
         .option-btn.correct {
-            background: rgba(0, 255, 136, 0.12) !important;
+            background: var(--primary-light, #e8f9f2) !important;
             border-color: var(--accent-green) !important;
-            color: #fff;
-            box-shadow: 0 0 20px var(--accent-green-glow);
+            color: var(--accent-green-dark) !important;
+            box-shadow: 0 4px 0 #179b68, 0 6px 20px var(--accent-green-glow) !important;
         }
 
         .option-btn.correct .option-key {
             background: var(--accent-green);
-            color: #000;
+            color: #FFFFFF;
         }
 
         .option-btn.wrong {
-            background: rgba(255, 71, 87, 0.15) !important;
+            background: var(--accent-red-light, #fef2f2) !important;
             border-color: var(--danger-red) !important;
+            color: #b91c1c !important;
+            box-shadow: 0 4px 0 #b91c1c !important;
             animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
 
         .option-btn.wrong .option-key {
             background: var(--danger-red);
-            color: #fff;
+            color: #FFFFFF;
         }
 
         @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(3px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
+            40%, 60% { transform: translate3d(5px, 0, 0); }
         }
 
         /* Explanation Box */
         .explanation-box {
-            margin-top: 1.5rem;
-            padding: 1.2rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.95rem;
+            margin-top: 1.8rem;
+            padding: 1.4rem 1.6rem;
+            border-radius: 18px;
+            font-size: 1.05rem;
             line-height: 1.6;
             display: none;
             animation: fadeIn 0.3s ease;
+            font-weight: 600;
+        }
+
+        .feedback-flex {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .feedback-mascot {
+            width: 80px;
+            height: auto;
+            flex-shrink: 0;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+            animation: mascotBounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes mascotBounceIn {
+            0% { transform: scale(0.6) translateY(10px); opacity: 0; }
+            70% { transform: scale(1.08) translateY(-4px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .feedback-content {
+            flex: 1;
+        }
+
+        .results-mascot {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 1.2rem;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+            animation: mascotBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .explanation-box.show-correct {
             display: block;
-            background: rgba(0, 255, 136, 0.08);
-            border-left: 4px solid var(--accent-green);
-            color: #e6edf3;
+            background: var(--primary-light, #e8f9f2);
+            border-left: 5px solid var(--accent-green);
+            color: var(--accent-green-dark);
         }
 
         .explanation-box.show-wrong {
             display: block;
-            background: rgba(255, 71, 87, 0.08);
-            border-left: 4px solid var(--danger-red);
-            color: #e6edf3;
+            background: var(--accent-red-light, #fef2f2);
+            border-left: 5px solid var(--danger-red);
+            color: #991b1b;
         }
 
         .btn-next {
-            margin-top: 1.8rem;
+            margin-top: 2rem;
             width: 100%;
-            padding: 1rem;
+            padding: 1.1rem;
             background: var(--accent-green);
-            color: #0b0f17;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
+            color: #FFFFFF;
+            font-family: var(--font-main, 'Nunito', sans-serif);
+            font-size: 1.15rem;
             font-weight: 800;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px var(--accent-green-glow);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #179b68, 0 8px 25px var(--accent-green-glow);
             display: none;
         }
 
         .btn-next:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #179b68, 0 10px 30px var(--accent-green-glow);
         }
 
         /* Results Modal / Screen */
         .results-container {
             display: none;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 3rem 2rem;
+            background: #FFFFFF;
+            border: 2px solid var(--card-border);
+            border-radius: 28px;
+            padding: 3.5rem 2.5rem;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(28, 48, 38, 0.12);
             animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.85); }
+            from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
 
         .stars-row {
             display: flex;
             justify-content: center;
-            gap: 0.8rem;
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
+            font-size: 3.8rem;
+            margin-bottom: 1.2rem;
         }
 
         .star-item {
+            width: 63px;
+            height: 63px;
+            object-fit: contain;
             opacity: 0.2;
             transform: scale(0.6);
+            filter: drop-shadow(0 3px 5px rgba(20, 35, 29, 0.28));
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .star-item.active {
             opacity: 1;
             transform: scale(1);
-            filter: drop-shadow(0 0 15px var(--gold-yellow));
+            filter: drop-shadow(0 4px 12px var(--gold-yellow));
         }
 
         .results-title {
-            font-size: 2.2rem;
-            font-weight: 800;
+            font-size: 2.4rem;
+            font-weight: 900;
             margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, #fff, var(--accent-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary, #1F332A);
         }
 
         .xp-badges-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
+            gap: 1.2rem;
+            margin: 2.2rem 0;
         }
 
         .xp-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 1.2rem;
+            background: var(--bg-soft, #EDF4F0);
+            border: 2px solid var(--card-border);
+            border-radius: 18px;
+            padding: 1.4rem;
             text-align: center;
         }
 
         .xp-card-icon {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 0.4rem;
         }
 
         .xp-card-val {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent-green);
+            font-family: var(--font-main, 'Nunito', sans-serif);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--accent-green-dark);
         }
 
         .xp-card-label {
-            font-size: 0.85rem;
-            color: #8b949e;
-            margin-top: 0.2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary, #526E61);
+            margin-top: 0.3rem;
         }
 
         .btn-restart {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-            color: #0b0f17;
-            padding: 1rem 2.5rem;
-            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent-green);
+            color: #FFFFFF;
+            padding: 1.1rem 2.2rem;
+            border-radius: 16px;
             font-weight: 800;
             font-size: 1.1rem;
             text-decoration: none;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 30px var(--accent-green-glow);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #179b68, 0 8px 25px var(--accent-green-glow);
             border: none;
             cursor: pointer;
             margin-top: 1rem;
         }
 
         .btn-restart:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 12px 35px rgba(0, 255, 136, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #179b68, 0 10px 30px var(--accent-green-glow);
         }
     </style>
 </head>
 <body>
 
-<header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
+<header th:replace="~{fragments/layout :: navBreadcrumb(active='quiz')}"></header>
 
 <div class="quiz-wrapper">
     <!-- HUD -->
     <div class="hud-bar" id="hudBar">
         <div class="lives-container" id="livesContainer">
-            <span class="heart" id="heart1">❤️</span>
-            <span class="heart" id="heart2">❤️</span>
-            <span class="heart" id="heart3">❤️</span>
+            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart1">
+            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart2">
+            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart3">
         </div>
         <div class="progress-track">
             <div class="progress-fill" id="progressFill"></div>
@@ -409,7 +453,7 @@
         <h2 class="question-title" id="questionTitle">Carregando pergunta...</h2>
 
         <div class="options-list" id="optionsList">
-            <!-- Opções geradas via JS -->
+            <!-- Opções geradas dinamicamente via JavaScript -->
         </div>
 
         <div class="explanation-box" id="explanationBox"></div>
@@ -418,38 +462,43 @@
 
     <!-- Results Screen -->
     <div class="results-container" id="resultsContainer">
+        <div id="resultsMascotWrapper">
+            <img id="resultsMascotImg" src="/img/Pulando.png" alt="Mascote" class="results-mascot">
+        </div>
         <div class="stars-row">
-            <span class="star-item" id="star1">⭐</span>
-            <span class="star-item" id="star2">⭐</span>
-            <span class="star-item" id="star3">⭐</span>
+            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 1" class="star-item" id="star1">
+            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 2" class="star-item" id="star2">
+            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 3" class="star-item" id="star3">
         </div>
         <h1 class="results-title" id="resultsTitle">Quiz Concluído!</h1>
-        <p style="color: #8b949e; font-size: 1.1rem;" id="resultsSubtitle">Você mandou muito bem no Módulo 1!</p>
+        <p style="color: var(--text-secondary); font-size: 1.15rem; font-weight: 700;" id="resultsSubtitle">Você mandou muito bem no Módulo!</p>
 
         <div class="xp-badges-grid">
             <div class="xp-card">
-                <div class="xp-card-icon">📘</div>
+                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-book.png}" alt="Etapas concluídas" class="sprite-icon-lg"></div>
                 <div class="xp-card-val">+100 XP</div>
                 <div class="xp-card-label">Etapas Concluídas</div>
             </div>
             <div class="xp-card" id="cardModuloCompleted">
-                <div class="xp-card-icon">🏆</div>
+                <div class="xp-card-icon">
+                    <img th:src="@{/img/sprites/icon-trophy.png}" alt="Troféu" class="sprite-icon-lg">
+                </div>
                 <div class="xp-card-val">+100 XP</div>
                 <div class="xp-card-label">Módulo Concluído</div>
             </div>
             <div class="xp-card" id="cardPerfect" style="display:none;">
-                <div class="xp-card-icon">💎</div>
+                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-diamond.png}" alt="Nota máxima" class="sprite-icon-lg"></div>
                 <div class="xp-card-val">+50 XP</div>
                 <div class="xp-card-label">Nota Máxima</div>
             </div>
             <div class="xp-card" id="cardNoLives" style="display:none;">
-                <div class="xp-card-icon">⚡</div>
+                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-heart.png}" alt="Sem perder vidas" class="sprite-icon-lg"></div>
                 <div class="xp-card-val">+30 XP</div>
                 <div class="xp-card-label">Sem Perder Vidas</div>
             </div>
         </div>
 
-        <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-green); margin: 1.5rem 0;" id="totalXpDisplay">
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--accent-green-dark); margin: 1.5rem 0;" id="totalXpDisplay">
             Total: +200 XP
         </div>
 
@@ -457,20 +506,20 @@
             <a th:href="@{'/modulos/' + ${modulo.id + 1}}" 
                id="btnNextModule"
                class="btn-restart" 
-               style="background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); color: #0b0f17; flex: 1; min-width: 220px;">
-               &#128640; Próximo Módulo &rarr;
+               style="background: var(--accent-green); color: #ffffff; flex: 1; min-width: 220px;">
+               <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Próximo Módulo &rarr;
             </a>
             
             <button onclick="window.location.reload()" 
                     class="btn-restart" 
-                    style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; flex: 1; min-width: 180px;">
-               &#128257; Refazer Quiz
+                    style="background: #ffffff; border: 2px solid var(--card-border); color: var(--text-primary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
+               <img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> Refazer Quiz
             </button>
 
             <a th:href="@{'/modulos/' + ${modulo.id}}" 
                class="btn-restart" 
-               style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #8b949e; flex: 1; min-width: 180px;">
-               &#127968; Trilha do Módulo
+               style="background: var(--bg-soft); border: 2px solid var(--card-border); color: var(--text-secondary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
+               <img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> Trilha do Módulo
             </a>
         </div>
     </div>
@@ -613,7 +662,14 @@
             btnElement.classList.add('correct');
             playSound('correct');
             expBox.className = 'explanation-box show-correct';
-            expBox.innerHTML = `<strong>\u2714 Resposta Correta!</strong><br>${q.explicacao || ''}`;
+            expBox.innerHTML = `
+                <div class="feedback-flex">
+                    <img src="/img/Pulando.png" alt="Mascote comemorando" class="feedback-mascot">
+                    <div class="feedback-content">
+                        <strong>\u2714 Resposta Correta! Excelente raciocínio!</strong><br>${q.explicacao || ''}
+                    </div>
+                </div>
+            `;
         } else {
             btnElement.classList.add('wrong');
 
@@ -627,13 +683,30 @@
             playSound('wrong');
 
             // Perder vida
-            if (lives === 3) document.getElementById('heart3').classList.add('lost');
-            else if (lives === 2) document.getElementById('heart2').classList.add('lost');
-            else if (lives === 1) document.getElementById('heart1').classList.add('lost');
+            if (lives === 3) {
+                const h3 = document.getElementById('heart3');
+                h3.classList.add('lost');
+                h3.src = '/img/sprites/icon-heart-empty.png';
+            } else if (lives === 2) {
+                const h2 = document.getElementById('heart2');
+                h2.classList.add('lost');
+                h2.src = '/img/sprites/icon-heart-empty.png';
+            } else if (lives === 1) {
+                const h1 = document.getElementById('heart1');
+                h1.classList.add('lost');
+                h1.src = '/img/sprites/icon-heart-empty.png';
+            }
             lives--;
 
             expBox.className = 'explanation-box show-wrong';
-            expBox.innerHTML = `<strong>\u2716 Resposta Incorreta!</strong> A alternativa correta era <strong>(${q.correta})</strong>.<br>${q.explicacao || ''}`;
+            expBox.innerHTML = `
+                <div class="feedback-flex">
+                    <img src="/img/Sentado.png" alt="Mascote estudando" class="feedback-mascot">
+                    <div class="feedback-content">
+                        <strong>\u2716 Não foi dessa vez, mas continue firme!</strong> A alternativa correta era <strong>(${q.correta})</strong>.<br>${q.explicacao || ''}
+                    </div>
+                </div>
+            `;
 
             if (lives === 0) {
                 btnNext.innerText = "Ver Resultado (Vidas Esgotadas) \u2192";
@@ -683,9 +756,11 @@
         const subtitleEl = document.getElementById('resultsSubtitle');
         const cardModuloCompleted = document.getElementById('cardModuloCompleted');
         const btnNextModule = document.getElementById('btnNextModule');
+        const mascotImg = document.getElementById('resultsMascotImg');
 
         if (res.passou) {
             playSound('win');
+            if (mascotImg) mascotImg.src = "/img/Pulando.png";
             titleEl.innerText = "Quiz Concluído!";
             subtitleEl.innerText = `Parabéns! Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões e concluiu o módulo!`;
 
@@ -700,10 +775,11 @@
                 document.getElementById('cardNoLives').style.display = 'block';
             }
             cardModuloCompleted.style.display = 'block';
-            btnNextModule.style.display = 'inline-block';
+            btnNextModule.style.display = 'inline-flex';
         } else {
             playSound('wrong');
-            titleEl.innerText = "Que Pena! Tente Novamente 💔";
+            if (mascotImg) mascotImg.src = "/img/Sentado.png";
+            titleEl.innerText = "Que Pena! Tente Novamente";
             subtitleEl.innerText = `Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões. Suas vidas acabaram ou você não atingiu a nota mínima.`;
 
             // Ocultar bônus e navegação do próximo módulo

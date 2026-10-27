@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeQuest — Aprenda a programar com prática</title>
+    <title>CodeQuest — Aprenda a programar com prática e diversão</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -14,67 +15,73 @@
 
     <section class="hero">
         <div class="hero-content">
-            <span class="badge">[DISPONÍVEL] Mundo 1: Lógica de Programação</span>
+            <span class="badge"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon"> Mundo 1 Disponível: Lógica de Programação</span>
 
             <h1 class="hero-title">
                 Aprenda a<br>
                 <span class="accent">programar</span><br>
-                com prática.
+                jogando.
             </h1>
 
             <p class="hero-text">
-                CodeQuest combina fases de conteúdo estruturado com desafios finais interativos para
-                desenvolver raciocínio lógico e habilidades de código.
+                O CodeQuest transforma o aprendizado de algoritmos em uma jornada divertida. 
+                Supere fases interativas, encare desafios épicos e desbloqueie novos mundos de conhecimento!
             </p>
 
             <div class="hero-actions">
-                <a href="/login" class="btn btn-primary">Começar agora &rarr;</a>
-                <a href="/modulos" class="btn btn-secondary">Ver Mundos</a>
+                <a href="/login" class="btn btn-primary"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Começar agora</a>
+                <a href="/modulos" class="btn btn-secondary"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon"> Explorar Mundos</a>
             </div>
         </div>
 
-        <div class="terminal">
-            <div class="terminal-bar">
-                <span class="dot dot-red"></span>
-                <span class="dot dot-yellow"></span>
-                <span class="dot dot-green"></span>
-                <span class="terminal-filename">quiz.cq</span>
+        <div class="hero-visual">
+            <div class="hero-mascot-wrapper">
+                <img th:src="@{/img/Pulando.png}" alt="Mascote CodeQuest comemorando" class="hero-mascot">
             </div>
-            <div class="terminal-body">
-                <div class="terminal-label">// Questão</div>
-                <div class="terminal-question">Qual tipo de dado armazena 36.5?</div>
 
-                <div class="option"><span class="key">A</span> INTEIRO</div>
-                <div class="option"><span class="key">B</span> TEXTO</div>
-                <div class="option"><span class="key">C</span> LÓGICO</div>
-                <div class="option correct"><span class="key">&#9989;</span> REAL</div>
+            <div class="terminal">
+                <div class="terminal-bar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="terminal-filename">desafio_interativo.cq</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-label"><img th:src="@{/img/sprites/icon-bulb.png}" alt="" class="sprite-icon"> Desafio Prático</div>
+                    <div class="terminal-question">Qual tipo de dado armazena o valor 36.5?</div>
 
-                <div class="terminal-feedback"><span class="bar"></span> Correto!</div>
+                    <div class="option"><span class="key">A</span> INTEIRO</div>
+                    <div class="option"><span class="key">B</span> TEXTO</div>
+                    <div class="option"><span class="key">C</span> LÓGICO</div>
+                    <div class="option correct"><span class="key system-symbol">&#10004;</span> REAL</div>
+
+                    <div class="terminal-feedback">
+                        <img th:src="@{/img/sprites/icon-party.png}" alt="" class="sprite-icon"> Resposta correta! +50 XP
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="section">
-        <div class="section-label">// COMO FUNCIONA</div>
+        <div class="section-label"><img th:src="@{/img/sprites/icon-xp.png}" alt="" class="sprite-icon"> METODOLOGIA GAMIFICADA</div>
+        <h2 class="section-title">Como funciona a sua jornada</h2>
 
         <div class="feature-grid">
             <div class="feature-card">
-                <div class="feature-icon">[1]</div>
-                <div class="feature-title">01 — Fases</div>
-                <div class="feature-text">Avance passo a passo pelo mapa de cada mundo com explicações práticas e
-                    diretas.</div>
+                <div class="feature-icon-bubble"><img th:src="@{/img/sprites/icon-map.png}" alt="Mapa de fases"></div>
+                <div class="feature-title">01 — Trilha de Fases</div>
+                <p class="feature-text">Avance passo a passo por mapas temáticos com explicações visuais, missões claras e exemplos diretos de código.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[2]</div>
-                <div class="feature-title">02 — Desafio Final</div>
-                <div class="feature-text">Encare o Quiz Final de cada Mundo com vidas limitadas para testar seu domínio.
-                </div>
+                <div class="feature-icon-bubble"><img th:src="@{/img/sprites/icon-target.png}" alt="Desafios finais"></div>
+                <div class="feature-title">02 — Desafios Finais</div>
+                <p class="feature-text">Enfrente o Boss de cada mundo em quizzes de múltipla escolha com vidas limitadas para consolidar seu domínio.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[3]</div>
-                <div class="feature-title">03 — Conquistas</div>
-                <div class="feature-text">Acumule XP, vença mundos e desbloqueie novos territórios de conhecimento.
-                </div>
+                <div class="feature-icon-bubble"><img th:src="@{/img/sprites/icon-trophy.png}" alt="XP e recompensas"></div>
+                <div class="feature-title">03 — XP & Recompensas</div>
+                <p class="feature-text">Acumule pontos de experiência, acompanhe suas estatísticas em tempo real e conquiste seu certificado de mestre dos algoritmos.</p>
             </div>
         </div>
     </section>

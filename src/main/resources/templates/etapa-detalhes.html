@@ -4,91 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${etapa.titulo} + ' — CodeQuest'">CodeQuest — Fase</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        .etapa-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        .objective-card {
-            background: rgba(0, 255, 136, 0.06);
-            border-left: 4px solid var(--green, #00ff88);
-            border-radius: 6px;
-            padding: 1.2rem 1.5rem;
-            margin: 1.5rem 0 2rem 0;
-        }
-        .objective-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--green, #00ff88);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.4rem;
-        }
-        .explanation-text {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #d1d5db;
-            white-space: pre-line;
-            margin-bottom: 2rem;
-        }
-        .code-box {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 2rem 0;
-        }
-        .code-header {
-            background: #161b22;
-            padding: 0.6rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid #30363d;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: #8b949e;
-        }
-        .code-body {
-            padding: 1.2rem 1.5rem;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: #e6edf3;
-            white-space: pre-line;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-    </style>
 </head>
 <body>
 
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
 <div class="etapa-container">
-    <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted" style="display:inline-block; margin-bottom:1rem;">
+    <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted" style="display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem;">
         &larr; Voltar para o Mapa do Mundo
     </a>
 
-    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
-        <span class="badge" th:text="'Fase ' + ${etapa.numero} + ' de ' + ${totalEtapas}">Fase 1 de 5</span>
-        <span class="section-label" style="margin:0;" th:text="${modulo.titulo}">Mundo 01</span>
-    </div>
+    <div class="etapa-header">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem; flex-wrap: wrap;">
+            <span class="badge"><img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"><span th:text="'Fase ' + ${etapa.numero} + ' de ' + ${totalEtapas}">Fase 1 de 5</span></span>
+            <span class="badge badge-info"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon"><span th:text="${modulo.titulo}">Mundo 01</span></span>
+        </div>
 
-    <h1 class="auth-title" style="margin-bottom: 1rem;" th:text="${etapa.titulo}">O que é Lógica de Programação?</h1>
+        <h1 class="auth-title" style="margin-bottom: 1rem; text-align: left;" th:text="${etapa.titulo}">O que é Lógica de Programação?</h1>
+    </div>
 
     <!-- Card de Missão da Fase -->
     <div class="objective-card" th:if="${etapa.objetivo != null}">
-        <div class="objective-title">// Missão da Fase</div>
-        <div style="color: #f3f4f6; font-size: 1rem;" th:text="${etapa.objetivo}">Missão...</div>
+        <div class="objective-title"><img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> Missão da Fase</div>
+        <div class="objective-content" th:text="${etapa.objetivo}">Missão...</div>
     </div>
 
     <!-- Texto de Explicação -->
@@ -96,13 +36,13 @@
         Explicação teórica da fase...
     </div>
 
-    <!-- Caixa de Exemplo / Código Estilo Terminal -->
+    <!-- Caixa de Exemplo / Código Estilo Terminal Claro/Moderno -->
     <div class="code-box" th:if="${etapa.exemplo != null}">
         <div class="code-header">
             <span class="dot dot-red"></span>
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
-            <span style="margin-left: 0.5rem;">exemplo_algoritmo.cq</span>
+            <span style="margin-left: 0.5rem; font-weight:700;">exemplo_algoritmo.cq</span>
         </div>
         <div class="code-body" th:utext="${etapa.exemplo}">
             1. Passo 1
@@ -121,7 +61,7 @@
         </div>
 
         <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted">
-            Mapa do Mundo
+            <img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> Mapa do Mundo
         </a>
 
         <div>
@@ -132,8 +72,8 @@
             </a>
             <a th:unless="${proximaEtapa != null}"
                th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}"
-               class="btn btn-primary" style="background: var(--green, #00ff88); color: #000;">
-                Desafio Final &rarr;
+               class="btn btn-primary" style="background: linear-gradient(135deg, var(--primary), #1db37a);">
+                <img th:src="@{/img/sprites/icon-trophy.png}" alt="" class="sprite-icon"> Desafio Final &rarr;
             </a>
         </div>
     </div>

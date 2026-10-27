@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${modulo.titulo} + ' — CodeQuest'">CodeQuest — Mundo</title>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -13,22 +14,34 @@
     <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
     <div class="modulos-wrapper">
-        <a href="/modulos" class="nav-link-muted" style="display:inline-block; margin-bottom:1rem;">&larr; Voltar para
-            Mundos</a>
+        <a href="/modulos" class="nav-link-muted"
+            style="display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem;">
+            &larr; Voltar para Mundos
+        </a>
 
-        <div class="section-label" th:text="'// MUNDO ' + ${#numbers.formatInteger(modulo.numero, 2)}">// MUNDO 01</div>
-        <h1 class="auth-title" style="margin-bottom:0.5rem;" th:text="${modulo.titulo}">Introdução à Lógica de
-            Programação</h1>
-        <p class="hero-text" style="margin-bottom:2rem; max-width:700px;" th:text="${modulo.descricao}">Descrição do
-            mundo</p>
+        <div
+            style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div>
+                <div class="section-label"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon">
+                    <span th:text="'MUNDO ' + ${#numbers.formatInteger(modulo.numero, 2)}">MUNDO 01</span></div>
+                <h1 class="auth-title" style="margin-bottom:0.5rem; text-align: left;" th:text="${modulo.titulo}">
+                    Introdução à Lógica de Programação</h1>
+                <p class="hero-text" style="margin-bottom:0; max-width:700px; font-size: 16px;"
+                    th:text="${modulo.descricao}">Descrição temática do mundo e conteúdos explorados.</p>
+            </div>
+            <img th:src="@{/img/Sentado.png}" alt="Mascote estudando"
+                style="width: 90px; filter: drop-shadow(0 4px 10px rgba(36,201,139,0.2));" class="hide-mobile">
+        </div>
 
-        <!-- Mapa de Fases (Visual de nós com trilha) -->
+        <!-- Mapa de Fases (Visual de nós com trilha em zigue-zague) -->
         <div class="phase-map-card">
             <div class="phase-map-header">
-                <span class="phase-map-tag">// MAPA DE FASES</span>
-                <span class="phase-map-status"
-                    th:text="${quizDesbloqueado} ? 'Mundo Pronto para o Desafio Final' : 'Em progresso'">Em
-                    progresso</span>
+                <span class="phase-map-tag"><img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> TRILHA DE APRENDIZADO</span>
+                <span class="phase-map-status">
+                    <img th:if="${quizDesbloqueado}" th:src="@{/img/sprites/icon-party.png}" alt="" class="sprite-icon">
+                    <img th:unless="${quizDesbloqueado}" th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon">
+                    <span th:text="${quizDesbloqueado} ? 'Desafio Final Desbloqueado!' : 'Trilha em Progresso'">Trilha em Progresso</span>
+                </span>
             </div>
 
             <div class="phase-map-track-vertical">
@@ -59,7 +72,7 @@
                         class="phase-node completed"
                         th:title="'Fase ' + ${etapa.numero} + ': ' + ${etapa.titulo} + ' (Concluída)'">
                         <div class="phase-node-circle">
-                            <span class="phase-check">&check;</span>
+                            <img th:src="@{/img/sprites/icon-party.png}" alt="Concluída" class="sprite-icon-md">
                         </div>
                         <div class="phase-node-info">
                             <span class="phase-node-num" th:text="'Fase ' + ${etapa.numero}">Fase 1</span>
@@ -73,7 +86,7 @@
                         class="phase-node current"
                         th:title="'Fase ' + ${etapa.numero} + ': ' + ${etapa.titulo} + ' (Fase Atual)'">
                         <div class="phase-node-circle">
-                            <span class="phase-current-indicator">&gt;&gt;</span>
+                            <img th:src="@{/img/sprites/icon-rocket.png}" alt="Fase atual" class="sprite-icon-md">
                         </div>
                         <div class="phase-node-info">
                             <span class="phase-node-num active-tag" th:text="'Fase ' + ${etapa.numero}">Fase 1</span>
@@ -85,7 +98,7 @@
                     <div th:if="${etapa.numero > etapaMaxima}" class="phase-node locked"
                         th:title="'Fase ' + ${etapa.numero} + ' bloqueada'">
                         <div class="phase-node-circle">
-                            <span class="phase-lock">&times;</span>
+                            <img th:src="@{/img/sprites/icon-lock.png}" alt="Bloqueada" class="sprite-icon-md">
                         </div>
                         <div class="phase-node-info">
                             <span class="phase-node-num" th:text="'Fase ' + ${etapa.numero}">Fase 2</span>
@@ -97,14 +110,14 @@
                 <!-- Nó do Boss / Desafio Final (Centralizado) -->
                 <div class="phase-row" style="align-items: center; padding-left: 0; padding-right: 0;">
 
-                    <!-- Se a última etapa foi ÍMPAR (ex: 5 fases): a Fase 5 ficou à ESQUERDA (x=18). A linha vai de 18 até o CENTRO (50) -->
+                    <!-- Se a última etapa foi ÍMPAR (ex: 5 fases): a Fase 5 ficou à ESQUERDA (x=18). Linha vai até o CENTRO (50) -->
                     <svg th:if="${#lists.size(etapas) % 2 != 0}" class="phase-curve-svg"
                         th:classappend="${quizDesbloqueado} ? 'curve-active' : ''" viewBox="0 0 100 100"
                         preserveAspectRatio="none">
                         <path d="M 18,0 C 18,50 50,50 50,100" />
                     </svg>
 
-                    <!-- Se a última etapa foi PAR (ex: 4 fases): a Fase 4 ficou à DIREITA (x=82). A linha vai de 82 até o CENTRO (50) -->
+                    <!-- Se a última etapa foi PAR (ex: 4 fases): a Fase 4 ficou à DIREITA (x=82). Linha vai até o CENTRO (50) -->
                     <svg th:if="${#lists.size(etapas) % 2 == 0}" class="phase-curve-svg"
                         th:classappend="${quizDesbloqueado} ? 'curve-active' : ''" viewBox="0 0 100 100"
                         preserveAspectRatio="none">
@@ -115,10 +128,10 @@
                     <a th:if="${quizDesbloqueado}" th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}"
                         class="phase-node boss-node unlocked" title="Desafio Final do Mundo">
                         <div class="phase-node-circle">
-                            <span class="phase-boss-icon">BOSS</span>
+                            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Troféu do Boss" class="sprite-icon-lg">
                         </div>
                         <div class="phase-node-info">
-                            <span class="phase-node-num boss-tag">DESAFIO FINAL</span>
+                            <span class="phase-node-num boss-tag"><img th:src="@{/img/sprites/icon-trophy.png}" alt="" class="sprite-icon-sm"> DESAFIO FINAL</span>
                             <span class="phase-node-title">Quiz do Mundo</span>
                         </div>
                     </a>
@@ -127,7 +140,7 @@
                     <div th:unless="${quizDesbloqueado}" class="phase-node boss-node locked"
                         title="Complete todas as fases anteriores para desbloquear o Desafio Final">
                         <div class="phase-node-circle">
-                            <span class="phase-lock">&times;</span>
+                            <img th:src="@{/img/sprites/icon-lock.png}" alt="Bloqueado" class="sprite-icon-lg">
                         </div>
                         <div class="phase-node-info">
                             <span class="phase-node-num">DESAFIO FINAL</span>
@@ -135,18 +148,21 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="phase-map-footer-actions">
-                    <span class="footer-muted" style="font-size: 0.9rem;">
-                        Dica: Conclua cada fase para avançar pelo mapa e destravar o Desafio Final.
+                    <span class="footer-muted" style="font-size: 0.95rem; font-weight: 700;">
+                        <img th:src="@{/img/sprites/icon-bulb.png}" alt="Dica" class="sprite-icon"> Dica: Conclua cada fase para avançar pelo mapa e destravar o Desafio Final.
                     </span>
                     <a th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapaMaxima <= etapas.size() ? etapaMaxima : etapas.size()}}"
-                        class="btn btn-primary" style="padding: 0.8rem 1.8rem; font-size: 1rem;">
-                        Continuar Jornada &rarr;
+                        class="btn btn-primary" style="padding: 14px 28px; font-size: 1.05rem;">
+                        <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Continuar Jornada
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
 
 </body>
 
