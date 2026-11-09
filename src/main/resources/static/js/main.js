@@ -96,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.get('quizBloqueado') === 'true') {
         showToast('Complete todas as etapas do módulo para desbloquear o Quiz Final!', 'warning');
     }
+    if (urlParams.get('moduloBloqueado') === 'true') {
+        showToast('Conclua o módulo anterior para desbloquear este mundo!', 'warning');
+    }
 
     // 4. MODAL ELEGANTE DE CONFIRMAÇÃO PARA AÇÕES DELETIVAS
     document.querySelectorAll('form[action*="excluir"], form.confirm-delete').forEach(form => {

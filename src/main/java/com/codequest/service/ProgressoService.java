@@ -1,7 +1,10 @@
 package com.codequest.service;
 
 import com.codequest.model.ProgressoUsuario;
+import com.codequest.model.Modulo;
 import com.codequest.repository.ProgressoRepository;
+
+import java.util.List;
 
 public class ProgressoService {
 
@@ -37,6 +40,40 @@ public class ProgressoService {
                 .orElse(false);
 
         return moduloConcluido || etapaMaxima > totalEtapas;
+    }
+
+    public boolean moduloConcluido(String usuarioId, int moduloId) {
+        return repository.findByUsuarioEModulo(usuarioId, moduloId)
+                .map(ProgressoUsuario::isConcluido)
+                .orElse(false);
+    }
+
+    /**
+     * Um jogador novo acessa somente o primeiro módulo publicado. Cada módulo
+     * seguinte exige a conclusão do módulo publicado imediatamente anterior.
+     */
+    public boolean podeAcessarModulo(String usuarioId, int moduloId, List<Modulo> modulos) {
+        boolean caminhoLiberado = true;
+
+        for (Modulo modulo : modulos) {
+            boolean acessivel = caminhoLiberado && modulo.isDisponivel();
+            if (modulo.getId() != null && modulo.getId() == moduloId) {
+                return acessivel;
+            }
+            caminhoLiberado = acessivel && moduloConcluido(usuarioId, modulo.getId());
+        }
+
+        return false;
+    }
+
+    public void aplicarDisponibilidadeIndividual(String usuarioId, List<Modulo> modulos) {
+        boolean caminhoLiberado = true;
+
+        for (Modulo modulo : modulos) {
+            boolean acessivel = caminhoLiberado && modulo.isDisponivel();
+            modulo.setDisponivel(acessivel);
+            caminhoLiberado = acessivel && moduloConcluido(usuarioId, modulo.getId());
+        }
     }
 
     public void registrarAvancoEtapa(String usuarioId, int moduloId, int etapaAtual, int totalEtapas) {

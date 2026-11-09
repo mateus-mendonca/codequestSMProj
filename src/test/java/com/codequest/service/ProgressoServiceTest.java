@@ -1,12 +1,14 @@
 package com.codequest.service;
 
 import com.codequest.model.ProgressoUsuario;
+import com.codequest.model.Modulo;
 import com.codequest.repository.ProgressoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -83,6 +85,38 @@ public class ProgressoServiceTest {
         assertEquals(200, resumo.getXpTotal());
         assertEquals(4, resumo.getFasesConcluidas()); // (4 - 1) + (2 - 1) = 3 + 1 = 4
         assertEquals(1, resumo.getMundosConquistados());
+    }
+
+    @Test
+    @DisplayName("Jogador novo deve acessar somente o primeiro módulo publicado")
+    public void testUsuarioNovoAcessaSomentePrimeiroModulo() {
+        List<Modulo> modulos = criarModulosPublicados();
+
+        assertTrue(progressoService.podeAcessarModulo("novo", 1, modulos));
+        assertFalse(progressoService.podeAcessarModulo("novo", 2, modulos));
+
+        progressoService.aplicarDisponibilidadeIndividual("novo", modulos);
+        assertTrue(modulos.get(0).isDisponivel());
+        assertFalse(modulos.get(1).isDisponivel());
+    }
+
+    @Test
+    @DisplayName("Conclusão do módulo anterior deve liberar o próximo")
+    public void testConclusaoDoModuloLiberaProximo() {
+        ProgressoUsuario concluido = new ProgressoUsuario(1, "jogador", 1, 200, 2, true, false, false, 1, 6);
+        stubRepository.dados.put("jogador:1", concluido);
+        List<Modulo> modulos = criarModulosPublicados();
+
+        assertTrue(progressoService.podeAcessarModulo("jogador", 2, modulos));
+        progressoService.aplicarDisponibilidadeIndividual("jogador", modulos);
+        assertTrue(modulos.get(1).isDisponivel());
+    }
+
+    private List<Modulo> criarModulosPublicados() {
+        return List.of(
+                new Modulo(1, 1, "Mundo 1", "", 5, true, 1),
+                new Modulo(2, 2, "Mundo 2", "", 5, true, 2)
+        );
     }
 
     private static class StubProgressoRepository extends ProgressoRepository {

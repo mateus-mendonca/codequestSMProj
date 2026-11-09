@@ -16,7 +16,12 @@
             <div class="section-label">// ADMINISTRAÇÃO</div>
             <h1 class="auth-title" style="margin-bottom:0;">Módulos</h1>
         </div>
-        <a href="/admin/modulos/novo" class="btn btn-primary">+ Novo módulo</a>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <form action="/admin/logout" method="post">
+                <button type="submit" class="btn btn-secondary">Sair</button>
+            </form>
+            <a href="/admin/modulos/novo" class="btn btn-primary">+ Novo módulo</a>
+        </div>
     </div>
 
     <div class="table-scroll" th:if="${!#lists.isEmpty(modulos)}">

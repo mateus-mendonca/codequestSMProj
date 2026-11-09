@@ -2,6 +2,7 @@ package com.codequest.controller;
 
 import com.codequest.model.Etapa;
 import com.codequest.model.Modulo;
+import com.codequest.config.UsuarioContexto;
 import com.codequest.service.EtapaService;
 import com.codequest.service.ModuloService;
 import com.codequest.service.ProgressoService;
@@ -36,7 +37,11 @@ public class EtapaController {
             Modulo modulo = moduloService.buscar(moduloId);
             List<Etapa> etapas = etapaService.listarPorModulo(moduloId);
 
-            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+            String usuarioId = UsuarioContexto.obterId(ctx);
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId, moduloService.listar())) {
+                ctx.redirect("/modulos?moduloBloqueado=true");
+                return;
+            }
             int etapaMaxima = progressoService.obterEtapaMaximaDesbloqueada(usuarioId, moduloId);
             boolean quizDesbloqueado = progressoService.podeAcessarQuiz(usuarioId, moduloId, etapas.size());
             com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
@@ -58,9 +63,13 @@ public class EtapaController {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
             int numero = Integer.parseInt(ctx.pathParam("numero"));
-            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+            String usuarioId = UsuarioContexto.obterId(ctx);
 
             Modulo modulo = moduloService.buscar(moduloId);
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId, moduloService.listar())) {
+                ctx.redirect("/modulos?moduloBloqueado=true");
+                return;
+            }
             List<Etapa> todasEtapas = etapaService.listarPorModulo(moduloId);
 
             // Validação de segurança: se a etapa solicitada estiver bloqueada, redireciona

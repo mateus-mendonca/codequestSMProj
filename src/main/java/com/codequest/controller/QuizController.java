@@ -3,6 +3,7 @@ package com.codequest.controller;
 import com.codequest.model.Modulo;
 import com.codequest.model.QuizQuestionDTO;
 import com.codequest.model.QuizResultDTO;
+import com.codequest.config.UsuarioContexto;
 import com.codequest.service.EtapaService;
 import com.codequest.service.ModuloService;
 import com.codequest.service.ProgressoService;
@@ -39,7 +40,12 @@ public class QuizController {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
             Modulo modulo = moduloService.buscar(moduloId);
-            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+            String usuarioId = UsuarioContexto.obterId(ctx);
+
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId, moduloService.listar())) {
+                ctx.redirect("/modulos?moduloBloqueado=true");
+                return;
+            }
 
             int totalEtapas = etapaService.listarPorModulo(moduloId).size();
             if (!progressoService.podeAcessarQuiz(usuarioId, moduloId, totalEtapas)) {
@@ -60,7 +66,13 @@ public class QuizController {
     public void obterQuestoes(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
-            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+            String usuarioId = UsuarioContexto.obterId(ctx);
+
+            moduloService.buscar(moduloId);
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId, moduloService.listar())) {
+                ctx.status(403).result("Este módulo ainda está bloqueado. Conclua o módulo anterior primeiro.");
+                return;
+            }
 
             int totalEtapas = etapaService.listarPorModulo(moduloId).size();
             if (!progressoService.podeAcessarQuiz(usuarioId, moduloId, totalEtapas)) {
@@ -78,17 +90,23 @@ public class QuizController {
     public static class QuizSubmission {
         public Map<Integer, String> respostas = new HashMap<>();
         public int vidasRestantes = 3;
-        public String usuarioId = "aluno_demo";
     }
 
     public void finalizarQuiz(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
             QuizSubmission submission = ctx.bodyAsClass(QuizSubmission.class);
+            String usuarioId = UsuarioContexto.obterId(ctx);
+
+            moduloService.buscar(moduloId);
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId, moduloService.listar())) {
+                ctx.status(403).result("Este módulo ainda está bloqueado. Conclua o módulo anterior primeiro.");
+                return;
+            }
 
             QuizResultDTO resultado = quizService.processarResultado(
                     moduloId,
-                    submission.usuarioId != null ? submission.usuarioId : "aluno_demo",
+                    usuarioId,
                     submission.respostas,
                     submission.vidasRestantes
             );
