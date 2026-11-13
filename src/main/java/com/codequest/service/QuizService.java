@@ -2,8 +2,8 @@ package com.codequest.service;
 
 import com.codequest.model.ProgressoUsuario;
 import com.codequest.model.Questao;
-import com.codequest.model.QuizQuestionDTO;
-import com.codequest.model.QuizResultDTO;
+import com.codequest.dto.QuizQuestionDTO;
+import com.codequest.dto.QuizResultDTO;
 import com.codequest.repository.ProgressoRepository;
 import com.codequest.repository.QuestaoRepository;
 

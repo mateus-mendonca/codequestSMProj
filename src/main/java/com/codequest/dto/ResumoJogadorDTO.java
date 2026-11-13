@@ -1,4 +1,4 @@
-package com.codequest.model;
+package com.codequest.dto;
 
 public class ResumoJogadorDTO {
     private int xpTotal;

@@ -11,7 +11,11 @@ public class QuestaoService {
 
     private static final Set<String> LETRAS_VALIDAS = Set.of("A", "B", "C", "D");
 
-    private final QuestaoRepository repository = new QuestaoRepository();
+    private final QuestaoRepository repository;
+
+    public QuestaoService() { this(new QuestaoRepository()); }
+
+    public QuestaoService(QuestaoRepository repository) { this.repository = repository; }
 
     public List<Questao> listarPorModulo(int moduloId) {
         return repository.findByModulo(moduloId);

@@ -1,12 +1,17 @@
 package com.codequest.service;
 
+import com.codequest.model.Modulo;
+import com.codequest.dto.ModuloItemDTO;
 import com.codequest.model.ProgressoUsuario;
+import com.codequest.dto.ResumoJogadorDTO;
+import com.codequest.repository.ModuloRepository;
 import com.codequest.repository.ProgressoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,11 +21,77 @@ public class ProgressoServiceTest {
 
     private ProgressoService progressoService;
     private StubProgressoRepository stubRepository;
+    private StubModuloRepository stubModuloRepository;
 
     @BeforeEach
     public void setUp() {
         stubRepository = new StubProgressoRepository();
-        progressoService = new ProgressoService(stubRepository);
+        stubModuloRepository = new StubModuloRepository();
+        progressoService = new ProgressoService(stubRepository, stubModuloRepository);
+    }
+
+    @Test
+    @DisplayName("Usuário novo sem histórico deve ter apenas o módulo 1 desbloqueado")
+    public void testUsuarioNovoApenasPrimeiroModuloDesbloqueado() {
+        assertTrue(progressoService.podeAcessarModulo("aluno_novo", 1));
+        assertFalse(progressoService.podeAcessarModulo("aluno_novo", 2));
+        assertFalse(progressoService.podeAcessarModulo("aluno_novo", 3));
+    }
+
+    @Test
+    @DisplayName("Módulo 2 deve ser desbloqueado somente após conclusão do Módulo 1")
+    public void testModulo2DesbloqueiaAposConcluirModulo1() {
+        String usuario = "aluno_avancado";
+        assertFalse(progressoService.podeAcessarModulo(usuario, 2));
+
+        ProgressoUsuario p = new ProgressoUsuario(1, usuario, 1, 200, 3, true, true, true, 1, 6);
+        stubRepository.dados.put(usuario + ":1", p);
+
+        assertTrue(progressoService.podeAcessarModulo(usuario, 2));
+    }
+
+    @Test
+    @DisplayName("Módulo indisponível globalmente deve permanecer bloqueado")
+    public void testModuloIndisponivelPermaneceBloqueado() {
+        String usuario = "aluno_veterano";
+        stubRepository.dados.put(usuario + ":1", new ProgressoUsuario(1, usuario, 1, 200, 3, true, true, true, 1, 6));
+        stubRepository.dados.put(usuario + ":2", new ProgressoUsuario(2, usuario, 2, 200, 3, true, true, true, 1, 6));
+
+        assertFalse(progressoService.podeAcessarModulo(usuario, 3));
+    }
+
+    @Test
+    @DisplayName("Listagem para usuário novo deve bloquear o Módulo 2 com justificativa")
+    public void testListarModulosParaUsuarioNovo() {
+        List<ModuloItemDTO> itens = progressoService.listarModulosParaUsuario("aluno_novo");
+        assertEquals(3, itens.size());
+
+        ModuloItemDTO m1 = itens.get(0);
+        assertTrue(m1.isDesbloqueado());
+        assertFalse(m1.isConcluido());
+        assertNull(m1.getMotivoBloqueio());
+
+        ModuloItemDTO m2 = itens.get(1);
+        assertFalse(m2.isDesbloqueado());
+        assertFalse(m2.isConcluido());
+        assertEquals("Conclua o Mundo 01 para desbloquear", m2.getMotivoBloqueio());
+
+        ModuloItemDTO m3 = itens.get(2);
+        assertFalse(m3.isDesbloqueado());
+        assertEquals("Em Breve", m3.getMotivoBloqueio());
+    }
+
+    @Test
+    @DisplayName("Listagem com Módulo 1 concluído deve liberar o Módulo 2")
+    public void testListarModulosComModulo1Concluido() {
+        String usuario = "aluno_completo";
+        stubRepository.dados.put(usuario + ":1", new ProgressoUsuario(1, usuario, 1, 200, 3, true, true, true, 1, 6));
+
+        List<ModuloItemDTO> itens = progressoService.listarModulosParaUsuario(usuario);
+        ModuloItemDTO m2 = itens.get(1);
+
+        assertTrue(m2.isDesbloqueado());
+        assertNull(m2.getMotivoBloqueio());
     }
 
     @Test
@@ -32,6 +103,12 @@ public class ProgressoServiceTest {
         assertTrue(progressoService.podeAcessarEtapa("aluno_novo", 1, 1));
         assertFalse(progressoService.podeAcessarEtapa("aluno_novo", 1, 2));
         assertFalse(progressoService.podeAcessarQuiz("aluno_novo", 1, 5));
+    }
+
+    @Test
+    @DisplayName("Não deve permitir acessar etapa de módulo bloqueado")
+    public void testNaoPermiteAcessarEtapaDeModuloBloqueado() {
+        assertFalse(progressoService.podeAcessarEtapa("aluno_novo", 2, 1));
     }
 
     @Test
@@ -51,11 +128,10 @@ public class ProgressoServiceTest {
     @Test
     @DisplayName("Após concluir a última etapa (5 de 5), o Quiz Final deve ser liberado")
     public void testConclusaoDaUltimaEtapaLiberaQuiz() {
-        // Conclui da etapa 1 até a etapa 5
         progressoService.registrarAvancoEtapa("aluno_quase_la", 1, 5, 5);
 
         int etapaMaxima = progressoService.obterEtapaMaximaDesbloqueada("aluno_quase_la", 1);
-        assertEquals(6, etapaMaxima); // 5 + 1 = 6 (marca que todas foram completadas)
+        assertEquals(6, etapaMaxima);
 
         assertTrue(progressoService.podeAcessarEtapa("aluno_quase_la", 1, 5));
         assertTrue(progressoService.podeAcessarQuiz("aluno_quase_la", 1, 5));
@@ -78,11 +154,22 @@ public class ProgressoServiceTest {
         stubRepository.dados.put("aluno_resumo:1", p1);
         stubRepository.dados.put("aluno_resumo:2", p2);
 
-        com.codequest.model.ResumoJogadorDTO resumo = progressoService.obterResumoJogador("aluno_resumo");
+        ResumoJogadorDTO resumo = progressoService.obterResumoJogador("aluno_resumo");
         assertNotNull(resumo);
         assertEquals(200, resumo.getXpTotal());
-        assertEquals(4, resumo.getFasesConcluidas()); // (4 - 1) + (2 - 1) = 3 + 1 = 4
+        assertEquals(4, resumo.getFasesConcluidas());
         assertEquals(1, resumo.getMundosConquistados());
+    }
+
+    private static class StubModuloRepository extends ModuloRepository {
+        @Override
+        public List<Modulo> findAll() {
+            return List.of(
+                    new Modulo(1, 1, "Introdução à Lógica", "Descrição", 5, true, 1),
+                    new Modulo(2, 2, "Variáveis", "Descrição", 5, true, 2),
+                    new Modulo(3, 3, "Operadores", "Descrição", 0, false, 3)
+            );
+        }
     }
 
     private static class StubProgressoRepository extends ProgressoRepository {
@@ -108,7 +195,7 @@ public class ProgressoServiceTest {
         }
 
         @Override
-        public com.codequest.model.ResumoJogadorDTO obterResumoJogador(String usuarioId) {
+        public ResumoJogadorDTO obterResumoJogador(String usuarioId) {
             int xp = 0;
             int fases = 0;
             int mundos = 0;
@@ -123,7 +210,7 @@ public class ProgressoServiceTest {
                     }
                 }
             }
-            return new com.codequest.model.ResumoJogadorDTO(xp, fases, mundos);
+            return new ResumoJogadorDTO(xp, fases, mundos);
         }
     }
 }

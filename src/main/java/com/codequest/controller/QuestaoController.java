@@ -11,8 +11,15 @@ import java.util.NoSuchElementException;
 
 public class QuestaoController {
 
-    private final QuestaoService service = new QuestaoService();
-    private final ModuloService moduloService = new ModuloService();
+    private final QuestaoService service;
+    private final ModuloService moduloService;
+
+    public QuestaoController() { this(new QuestaoService(), new ModuloService()); }
+
+    public QuestaoController(QuestaoService service, ModuloService moduloService) {
+        this.service = service;
+        this.moduloService = moduloService;
+    }
 
     /** GET /admin/modulos/{moduloId}/questoes — lista questões de um módulo */
     public void listar(Context ctx) {
