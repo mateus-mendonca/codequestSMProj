@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Questões</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
-<body>
+<body class="page-layout">
 
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='quiz')}"></header>
 
@@ -16,7 +18,7 @@
     <div class="admin-header">
         <div>
             <div class="section-label">// QUESTÕES DO MÓDULO</div>
-            <h1 class="auth-title" style="margin-bottom:0;" th:text="${modulo.titulo}">Título do módulo</h1>
+            <h1 class="admin-questions-title auth-title" th:text="${modulo.titulo}">Título do módulo</h1>
         </div>
         <a th:href="@{/admin/modulos/{moduloId}/questoes/novo(moduloId=${modulo.id})}" class="btn btn-primary">
             + Nova questão
@@ -42,7 +44,7 @@
                 <a th:href="@{/admin/modulos/{moduloId}/questoes/{id}/editar(moduloId=${modulo.id},id=${questao.id})}"
                    class="btn btn-secondary">Editar</a>
                 <form th:action="@{/admin/modulos/{moduloId}/questoes/{id}/excluir(moduloId=${modulo.id},id=${questao.id})}"
-                      method="post" onsubmit="return confirm('Excluir esta questão?');">
+                      method="post">
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
             </td>

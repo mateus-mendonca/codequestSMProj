@@ -3,34 +3,36 @@
 
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${modulo.titulo} + ' — CodeQuest'">CodeQuest — Mundo</title>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
 
-<body>
+<body class="page-layout">
 
     <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
     <div class="modulos-wrapper">
-        <a href="/modulos" class="nav-link-muted"
-            style="display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem;">
+        <a href="/modulos" class="world-back-link nav-link-muted"
+           >
             &larr; Voltar para Mundos
         </a>
 
         <div
-            style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem;">
+            class="world-heading">
             <div>
                 <div class="section-label"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon">
                     <span th:text="'MUNDO ' + ${#numbers.formatInteger(modulo.numero, 2)}">MUNDO 01</span></div>
-                <h1 class="auth-title" style="margin-bottom:0.5rem; text-align: left;" th:text="${modulo.titulo}">
+                <h1 class="world-title auth-title" th:text="${modulo.titulo}">
                     Introdução à Lógica de Programação</h1>
-                <p class="hero-text" style="margin-bottom:0; max-width:700px; font-size: 16px;"
+                <p class="world-description hero-text"
                     th:text="${modulo.descricao}">Descrição temática do mundo e conteúdos explorados.</p>
             </div>
             <img th:src="@{/img/Sentado.png}" alt="Mascote estudando"
-                style="width: 90px; filter: drop-shadow(0 4px 10px rgba(36,201,139,0.2));" class="hide-mobile">
+                class="world-mascot hide-mobile">
         </div>
 
         <!-- Mapa de Fases (Visual de nós com trilha em zigue-zague) -->
@@ -44,7 +46,7 @@
                 </span>
             </div>
 
-            <div class="phase-map-track-vertical">
+            <div class="phase-map-track-vertical" th:attr="data-world=${modulo.id},data-position=${etapaMaxima}">
                 <!-- Iteração sobre as Fases -->
                 <div th:each="etapa, iterStat : ${etapas}" class="phase-row"
                     th:classappend="${iterStat.index % 2 == 0} ? 'align-left' : 'align-right'">
@@ -108,7 +110,7 @@
                 </div>
 
                 <!-- Nó do Boss / Desafio Final (Centralizado) -->
-                <div class="phase-row" style="align-items: center; padding-left: 0; padding-right: 0;">
+                <div class="phase-row-final phase-row">
 
                     <!-- Se a última etapa foi ÍMPAR (ex: 5 fases): a Fase 5 ficou à ESQUERDA (x=18). Linha vai até o CENTRO (50) -->
                     <svg th:if="${#lists.size(etapas) % 2 != 0}" class="phase-curve-svg"
@@ -150,11 +152,11 @@
                 </div>
 
                 <div class="phase-map-footer-actions">
-                    <span class="footer-muted" style="font-size: 0.95rem; font-weight: 700;">
+                    <span class="world-map-hint footer-muted">
                         <img th:src="@{/img/sprites/icon-bulb.png}" alt="Dica" class="sprite-icon"> Dica: Conclua cada fase para avançar pelo mapa e destravar o Desafio Final.
                     </span>
                     <a th:href="@{'/modulos/' + ${modulo.id} + '/etapas/' + ${etapaMaxima <= etapas.size() ? etapaMaxima : etapas.size()}}"
-                        class="btn btn-primary" style="padding: 14px 28px; font-size: 1.05rem;">
+                        class="world-continue btn btn-primary">
                         <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Continuar Jornada
                     </a>
                 </div>

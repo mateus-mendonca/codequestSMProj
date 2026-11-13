@@ -1,0 +1,134 @@
+/* ==========================================================================
+   RESPONSIVIDADE (Breakpoints Mobile & Tablet)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        gap: 40px;
+        padding: 40px 24px 60px;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .terminal {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 20px;
+        gap: 12px;
+    }
+
+    .navbar-brand-row {
+        width: 100%;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .breadcrumb {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 14px 16px;
+        background: var(--bg-surface);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        margin-top: 4px;
+        width: 100%;
+    }
+
+    .breadcrumb.open {
+        display: flex;
+    }
+
+    .crumb-sep {
+        display: none;
+    }
+
+    .breadcrumb a,
+    .breadcrumb span {
+        padding: 6px 0;
+        font-size: 14px;
+        width: 100%;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .breadcrumb a:last-child,
+    .breadcrumb span:last-child {
+        border-bottom: none;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-text {
+        font-size: 16px;
+    }
+
+    .section {
+        padding: 40px 20px;
+    }
+
+    .modulos-wrapper {
+        padding: 28px 16px;
+    }
+
+    .module-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+    }
+
+    .phase-row.align-left {
+        padding-left: 20px;
+    }
+
+    .phase-row.align-right {
+        padding-right: 20px;
+    }
+
+    .phase-curve-svg {
+        height: 55px;
+    }
+
+    .nav-buttons {
+        flex-direction: column !important;
+        gap: 16px !important;
+        align-items: stretch !important;
+        text-align: center;
+    }
+
+    .nav-buttons .btn {
+        width: 100%;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 24px 20px;
+        text-align: center;
+    }
+
+    .admin-wrapper {
+        padding: 24px 16px;
+    }
+}

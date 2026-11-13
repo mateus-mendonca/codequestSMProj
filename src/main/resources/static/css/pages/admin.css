@@ -1,0 +1,199 @@
+/* ---------- Admin (CRUD & Tabelas) ---------- */
+.admin-wrapper {
+    padding: 40px 48px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.admin-breadcrumb-link {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.admin-breadcrumb-link:hover {
+    color: var(--primary);
+}
+
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 24px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14px;
+}
+
+.admin-table th {
+    background: var(--bg-soft);
+    color: var(--text-secondary);
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table td.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.admin-table td.actions form {
+    margin: 0;
+}
+
+.tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+}
+
+.tag-green {
+    color: var(--primary-dark);
+    border-color: rgba(36, 201, 139, 0.3);
+    background: var(--primary-light);
+}
+
+.tag-muted {
+    color: var(--text-muted);
+}
+
+.form-card {
+    background: var(--bg-surface);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 680px;
+    box-shadow: var(--shadow-sm);
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row label {
+    display: block;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row textarea,
+.form-row select {
+    width: 100%;
+    background: var(--bg-soft);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-row input:focus,
+.form-row textarea:focus,
+.form-row select:focus {
+    border-color: var(--primary);
+    background: var(--bg-surface);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.form-row textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-row-inline {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row-inline .form-row {
+    flex: 1;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.checkbox-row input {
+    accent-color: var(--primary);
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+.checkbox-row label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.form-actions {
+    display: flex;
+    gap: 14px;
+}
+
+.alert-error {
+    background: var(--accent-red-light);
+    border: 1.5px solid rgba(239, 68, 68, 0.3);
+    color: var(--text-danger);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.empty-state {
+    padding: 48px;
+    text-align: center;
+    color: var(--text-muted);
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    font-weight: 700;
+}

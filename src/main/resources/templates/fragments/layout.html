@@ -5,10 +5,12 @@
     <title>fragments</title>
 </head>
 
-<body>
+<body class="page-layout">
 
     <!-- Navbar simples usada na home: logo gamificado com mascote + botão de acesso -->
     <header th:fragment="navHome" class="navbar">
+        <button type="button" class="btn btn-secondary cq-theme">Alternar tema</button>
+        <button type="button" class="btn btn-secondary cq-help">Tutorial</button>
         <a href="/" class="logo">
             <img th:src="@{/img/favicon.png}" alt="CodeQuest" class="logo-img">
             <span>Code<b>Quest</b></span>
@@ -18,13 +20,15 @@
 
     <!-- Navbar com breadcrumb, usada nas páginas internas (login, módulos, etapas, etc) -->
     <header th:fragment="navBreadcrumb(active)" class="navbar">
+        <button type="button" class="btn btn-secondary cq-theme">Alternar tema</button>
+        <button type="button" class="btn btn-secondary cq-help">Tutorial</button>
         <div class="navbar-brand-row">
             <a href="/" class="logo">
                 <img th:src="@{/img/favicon.png}" alt="CodeQuest" class="logo-img">
                 <span>Code<b>Quest</b></span>
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Abrir navegação"
-                onclick="document.querySelector('.breadcrumb').classList.toggle('open')">
+                >
                 <span></span>
                 <span></span>
                 <span></span>
@@ -66,12 +70,12 @@
     </header>
 
     <footer th:fragment="footer" class="footer">
-        <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-weight:900; color:var(--primary); display:inline-flex; align-items:center; gap:6px;"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> CodeQuest</span>
+        <div class="footer-brand-row">
+            <span class="footer-brand-name"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> CodeQuest</span>
             <span>&copy; 2026</span>
         </div>
         <span class="footer-muted">Plataforma Educacional Gamificada de Programação</span>
-        <script th:src="@{/js/main.js}"></script>
+        <script type="module" th:src="@{/js/main.js}"></script>
     </footer>
 
 </body>

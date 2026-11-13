@@ -2,27 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${etapa.titulo} + ' — CodeQuest'">CodeQuest — Fase</title>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
-<body>
+<body class="page-layout">
 
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
 <div class="etapa-container">
-    <a th:href="@{'/modulos/' + ${modulo.id}}" class="nav-link-muted" style="display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem;">
+    <a th:href="@{'/modulos/' + ${modulo.id}}" class="lesson-back-link nav-link-muted">
         &larr; Voltar para o Mapa do Mundo
     </a>
 
     <div class="etapa-header">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem; flex-wrap: wrap;">
+        <div class="lesson-badges">
             <span class="badge"><img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"><span th:text="'Fase ' + ${etapa.numero} + ' de ' + ${totalEtapas}">Fase 1 de 5</span></span>
             <span class="badge badge-info"><img th:src="@{/img/sprites/icon-world.png}" alt="" class="sprite-icon"><span th:text="${modulo.titulo}">Mundo 01</span></span>
         </div>
 
-        <h1 class="auth-title" style="margin-bottom: 1rem; text-align: left;" th:text="${etapa.titulo}">O que é Lógica de Programação?</h1>
+        <h1 class="lesson-title auth-title" th:text="${etapa.titulo}">O que é Lógica de Programação?</h1>
     </div>
 
     <!-- Card de Missão da Fase -->
@@ -42,7 +44,7 @@
             <span class="dot dot-red"></span>
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
-            <span style="margin-left: 0.5rem; font-weight:700;">exemplo_algoritmo.cq</span>
+            <span class="code-filename">exemplo_algoritmo.cq</span>
         </div>
         <div class="code-body" th:utext="${etapa.exemplo}">
             1. Passo 1
@@ -72,7 +74,7 @@
             </a>
             <a th:unless="${proximaEtapa != null}"
                th:href="@{'/modulos/' + ${modulo.id} + '/quiz'}"
-               class="btn btn-primary" style="background: linear-gradient(135deg, var(--primary), #1db37a);">
+               class="lesson-final-challenge btn btn-primary">
                 <img th:src="@{/img/sprites/icon-trophy.png}" alt="" class="sprite-icon"> Desafio Final &rarr;
             </a>
         </div>

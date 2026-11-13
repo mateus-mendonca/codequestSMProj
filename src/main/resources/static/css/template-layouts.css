@@ -1,0 +1,36 @@
+/* Presentation declarations extracted from Thymeleaf templates. */
+.page-layout .lesson-back-link { display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem; }
+.page-layout .lesson-badges { display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem; flex-wrap: wrap; }
+.page-layout .lesson-title { margin-bottom: 1rem; text-align: left; }
+.page-layout .code-filename { margin-left: 0.5rem; font-weight:700; }
+.page-layout .lesson-final-challenge { background: linear-gradient(135deg, var(--primary), #1db37a); }
+.page-layout .auth-section-label { text-align: center; margin-bottom: 6px; }
+.page-layout .world-back-link { display:inline-flex; align-items:center; gap:6px; margin-bottom:1.5rem; }
+.page-layout .world-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 2rem; }
+.page-layout .world-title { margin-bottom:0.5rem; text-align: left; }
+.page-layout .world-description { margin-bottom:0; max-width:700px; font-size: 16px; }
+.page-layout .world-mascot { width: 90px; filter: drop-shadow(0 4px 10px rgba(36,201,139,0.2)); }
+.page-layout .phase-row-final { align-items: center; padding-left: 0; padding-right: 0; }
+.page-layout .world-map-hint { font-size: 0.95rem; font-weight: 700; }
+.page-layout .world-continue { padding: 14px 28px; font-size: 1.05rem; }
+.page-layout .worlds-label-icon { margin-right: 4px; }
+.page-layout .worlds-title { margin-bottom:0; text-align: left; }
+.page-layout .worlds-description { margin: 6px 0 0; font-size: 15px; }
+.page-layout .worlds-mascot { width: 100px; filter: drop-shadow(0 6px 12px rgba(36,201,139,0.2)); }
+.page-layout .worlds-locked-alert { margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.page-layout .world-card-link { text-decoration: none; color: inherit; }
+.page-layout .world-enter-label { color: var(--primary-dark); font-weight: 800; }
+.page-layout .world-completed-badge { background: rgba(36, 201, 139, 0.15); color: var(--primary-dark); }
+.page-layout .world-coming-soon-badge { background: var(--bg-soft); color: var(--text-muted); border-color: var(--border-soft); }
+.page-layout .quiz-results-subtitle { color: var(--text-secondary); font-size: 1.15rem; font-weight: 700; }
+.page-layout .quiz-perfect-bonus { display:none; }
+.page-layout .quiz-lives-bonus { display:none; }
+.page-layout .quiz-total-xp { font-size: 2.2rem; font-weight: 900; color: var(--accent-green-dark); margin: 1.5rem 0; }
+.page-layout .quiz-result-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
+.page-layout .quiz-next-world { background: var(--accent-green); color: #ffffff; flex: 1; min-width: 220px; }
+.page-layout .quiz-retry { background: var(--bg-surface); border: 2px solid var(--card-border); color: var(--text-primary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px; }
+.page-layout .quiz-back-to-map { background: var(--bg-soft); border: 2px solid var(--card-border); color: var(--text-secondary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px; }
+.page-layout .admin-modules-title { margin-bottom:0; }
+.page-layout .admin-questions-title { margin-bottom:0; }
+.page-layout .footer-brand-row { display:flex; align-items:center; gap:8px; }
+.page-layout .footer-brand-name { font-weight:900; color:var(--primary); display:inline-flex; align-items:center; gap:6px; }
