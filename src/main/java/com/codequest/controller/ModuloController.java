@@ -9,7 +9,11 @@ import java.util.NoSuchElementException;
 
 public class ModuloController {
 
-    private final ModuloService service = new ModuloService();
+    private final ModuloService service;
+
+    public ModuloController() { this(new ModuloService()); }
+
+    public ModuloController(ModuloService service) { this.service = service; }
 
     /** GET /admin/modulos — lista todos os módulos */
     public void listar(Context ctx) {

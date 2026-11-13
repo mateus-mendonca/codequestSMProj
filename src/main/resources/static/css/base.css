@@ -1,0 +1,106 @@
+/* ==========================================================================
+   CODEQUEST — DESIGN SYSTEM GAMIFICADO & ACESSÍVEL (V2)
+   Inspirado em interfaces educacionais modernas (Duolingo-like)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Cores de Identidade & Gamificação */
+    --primary: #24C98B;
+    --primary-hover: #1db37a;
+    --primary-dark: #179b68;
+    --primary-light: #e8f9f2;
+    --primary-glow: rgba(36, 201, 139, 0.25);
+
+    /* Cores de Acento */
+    --accent-blue: #3B82F6;
+    --accent-blue-light: #eff6ff;
+    --accent-blue-dark: #2563eb;
+    --accent-purple: #8B5CF6;
+    --accent-purple-light: #f5f3ff;
+    --accent-orange: #F97316;
+    --accent-orange-light: #fff7ed;
+    --accent-yellow: #F59E0B;
+    --accent-yellow-light: #fefce8;
+    --accent-red: #EF4444;
+    --accent-red-light: #fef2f2;
+
+    /* Superfícies & Fundos Neutros */
+    --bg-main: #F4F8F6;
+    --bg-surface: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-soft: #EDF4F0;
+    --bg-alt: #E3ECE7;
+
+    /* Bordas & Sombras */
+    --border: #DDE7E2;
+    --border-soft: #EBF2EE;
+    --border-dark: #C6D6CE;
+    --shadow-sm: 0 2px 4px rgba(28, 48, 38, 0.04);
+    --shadow-md: 0 4px 12px rgba(28, 48, 38, 0.08);
+    --shadow-lg: 0 10px 25px rgba(28, 48, 38, 0.1);
+    --shadow-xl: 0 20px 40px rgba(28, 48, 38, 0.12);
+    --shadow-btn: 0 4px 0 #179b68;
+    --shadow-btn-sec: 0 3px 0 #C6D6CE;
+
+    /* Tipografia & Contrastes */
+    --text-primary: #1F332A;
+    --text-secondary: #526E61;
+    --text-muted: #7E978C;
+    --text-light: #FFFFFF;
+    --text-danger: #b91c1c;
+    --text-on-primary: #ffffff;
+
+    /* Fontes */
+    --font-main: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-code: 'Fira Code', monospace;
+
+    /* Tokens de compatibilidade retroativa com código existente */
+    --bg: var(--bg-main);
+    --bg-panel: var(--bg-surface);
+    --bg-panel-2: var(--bg-soft);
+    --green: var(--primary);
+    --green-dim: var(--primary-dark);
+    --green-glow: var(--primary-glow);
+    --text: var(--text-primary);
+    --muted: var(--text-secondary);
+    --muted-2: var(--text-muted);
+    --font: var(--font-main);
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-main);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(36, 201, 139, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+code, pre {
+    font-family: var(--font-code);
+}

@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Módulos</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
-<body>
+<body class="page-layout">
 
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
@@ -14,7 +16,7 @@
     <div class="admin-header">
         <div>
             <div class="section-label">// ADMINISTRAÇÃO</div>
-            <h1 class="auth-title" style="margin-bottom:0;">Módulos</h1>
+            <h1 class="admin-modules-title auth-title">Módulos</h1>
         </div>
         <a href="/admin/modulos/novo" class="btn btn-primary">+ Novo módulo</a>
     </div>
@@ -47,8 +49,7 @@
             </td>
             <td class="actions">
                 <a th:href="@{/admin/modulos/{id}/editar(id=${modulo.id})}" class="btn btn-secondary">Editar</a>
-                <form th:action="@{/admin/modulos/{id}/excluir(id=${modulo.id})}" method="post"
-                      onsubmit="return confirm('Excluir este módulo e todas as suas questões?');">
+                <form th:action="@{/admin/modulos/{id}/excluir(id=${modulo.id})}" method="post">
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
             </td>

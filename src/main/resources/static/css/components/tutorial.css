@@ -1,0 +1,12 @@
+/* Guided tour: four panes leave the real target visible and interactive. */
+.cq-tour-pane { position: fixed; z-index: 10000; background: rgb(0 0 0 / .62); backdrop-filter: blur(5px) brightness(.72); }
+.cq-tour-outline { position: fixed; z-index: 10001; border: 3px solid var(--primary); border-radius: 12px; box-shadow: 0 0 22px var(--primary-glow); pointer-events: none; }
+.cq-guide { position: fixed; z-index: 10002; width: min(360px, calc(100vw - 24px)); max-height: 46vh; overflow: auto; padding: 20px; border-radius: 18px; border: 2px solid var(--primary); background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-xl); }
+.cq-guide img { width: 76px; height: 76px; object-fit: contain; float: left; margin: 0 14px 8px 0; }
+.cq-guide h2 { margin: 0 0 8px; font-size: 20px; }
+.cq-guide p { margin: 8px 0 16px; }
+.cq-guide-actions { clear: both; display: flex; flex-wrap: wrap; gap: 8px; }
+.cq-guide .btn { padding: 8px 12px; font-size: 14px; }
+.cq-guide small { display: block; color: var(--text-secondary); }
+
+html[data-guide-active] body { animation: none; }

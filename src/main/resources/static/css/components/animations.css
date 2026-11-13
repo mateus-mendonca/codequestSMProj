@@ -1,0 +1,6 @@
+body { animation: cq-page-enter .22s ease-out; }
+@keyframes cq-page-enter { from { opacity: .5; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.cq-trail-mascot { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+.cq-advance { animation: cq-walk .65s ease-out; }
+@keyframes cq-walk { from { transform: translate(-40px, -15px); opacity: .2; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

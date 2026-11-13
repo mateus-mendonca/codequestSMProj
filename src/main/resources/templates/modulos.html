@@ -3,13 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest — Escolha um Mundo</title>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
 
-<body>
+<body class="page-layout">
 
     <header th:replace="~{fragments/layout :: navBreadcrumb(active='modulos')}"></header>
 
@@ -17,46 +19,56 @@
         <div class="modulos-header">
             <div>
                 <div class="section-label">
-                    <img th:src="@{/img/sprites/icon-world.png}" alt="Mundos" class="sprite-icon"
-                        style="margin-right: 4px;">
+                    <img th:src="@{/img/sprites/icon-world.png}" alt="Mundos" class="worlds-label-icon sprite-icon"
+                       >
                     MAPA DE AVENTURAS
                 </div>
-                <h1 class="auth-title" style="margin-bottom:0; text-align: left;">Escolha o seu Mundo</h1>
-                <p class="hero-text" style="margin: 6px 0 0; font-size: 15px;">Selecione um território de aprendizagem
+                <h1 class="worlds-title auth-title">Escolha o seu Mundo</h1>
+                <p class="worlds-description hero-text">Selecione um território de aprendizagem
                     para iniciar sua trilha de desafios.</p>
             </div>
             <img th:src="@{/img/Correndo.png}" alt="Mascote correndo"
-                style="width: 100px; filter: drop-shadow(0 6px 12px rgba(36,201,139,0.2));" class="hide-mobile">
+                class="worlds-mascot hide-mobile">
+        </div>
+
+        <div th:if="${bloqueado}" class="worlds-locked-alert alert-error">
+            <img th:src="@{/img/sprites/icon-lock.png}" alt="Bloqueado" class="sprite-icon">
+            <span>Este mundo ainda está bloqueado. Conclua o Desafio Final do mundo anterior para destravá-lo.</span>
         </div>
 
         <div class="modulos-trail">
-            <a th:each="modulo : ${modulos}" th:href="${modulo.disponivel} ? @{'/modulos/' + ${modulo.id}} : '#'"
-                class="module-card" th:classappend="${!modulo.disponivel} ? 'locked'"
-                style="text-decoration: none; color: inherit;">
+            <a th:each="item : ${modulos}" th:href="${item.desbloqueado} ? @{'/modulos/' + ${item.modulo.id}} : '#'"
+                class="world-card-link module-card" th:classappend="${!item.desbloqueado} ? 'locked'"
+               >
 
                 <div class="module-card-left">
-                <div class="module-icon-bubble">
-                    <img th:if="${modulo.disponivel}" th:src="@{/img/sprites/icon-laptop.png}" alt="Módulo disponível">
-                    <img th:unless="${modulo.disponivel}" th:src="@{/img/sprites/icon-lock.png}" alt="Módulo bloqueado">
+                    <div class="module-icon-bubble">
+                        <img th:if="${item.desbloqueado}" th:src="@{/img/sprites/icon-laptop.png}" alt="Módulo disponível">
+                        <img th:unless="${item.desbloqueado}" th:src="@{/img/sprites/icon-lock.png}" alt="Módulo bloqueado">
                     </div>
 
                     <div class="module-card-info">
-                        <div class="module-number" th:text="'Mundo ' + ${#numbers.formatInteger(modulo.numero, 2)}">
+                        <div class="module-number" th:text="'Mundo ' + ${#numbers.formatInteger(item.modulo.numero, 2)}">
                             Mundo 01</div>
-                        <h2 class="module-title" th:text="${modulo.titulo}">Título do Mundo</h2>
-                        <p class="module-desc" th:text="${modulo.descricao}">Descrição temática das habilidades
+                        <h2 class="module-title" th:text="${item.modulo.titulo}">Título do Mundo</h2>
+                        <p class="module-desc" th:text="${item.modulo.descricao}">Descrição temática das habilidades
                             ensinadas neste módulo.</p>
 
-                        <div class="module-meta" th:if="${modulo.disponivel}">
-                            <span><img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> <strong th:text="${modulo.topicos} + ' fases'">5 fases</strong></span>
-                            <span style="color: var(--primary-dark); font-weight: 800;">Entrar na Trilha &rarr;</span>
+                        <div class="module-meta">
+                            <span th:if="${item.desbloqueado}"><img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> <strong th:text="${item.modulo.topicos} + ' fases'">5 fases</strong></span>
+                            <span th:if="${item.desbloqueado}" class="world-enter-label">Entrar na Trilha &rarr;</span>
+
+                            <span th:if="${!item.desbloqueado and item.modulo.disponivel}"><img th:src="@{/img/sprites/icon-lock.png}" alt="" class="sprite-icon"> <strong th:text="${item.motivoBloqueio}">Conclua o Mundo 01 para desbloquear</strong></span>
+                            <span th:if="${!item.modulo.disponivel}"><img th:src="@{/img/sprites/icon-bulb.png}" alt="" class="sprite-icon"> <strong>Em desenvolvimento</strong></span>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <span th:if="${modulo.disponivel}" class="module-available-badge"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon-sm"> Desbloqueado</span>
-                    <span th:unless="${modulo.disponivel}" class="module-lock-badge"><img th:src="@{/img/sprites/icon-lock.png}" alt="" class="sprite-icon-sm"> Em Breve</span>
+                    <span th:if="${item.concluido}" class="world-completed-badge module-available-badge"><img th:src="@{/img/sprites/icon-trophy.png}" alt="" class="sprite-icon-sm"> Concluído</span>
+                    <span th:if="${item.desbloqueado and !item.concluido}" class="module-available-badge"><img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon-sm"> Desbloqueado</span>
+                    <span th:if="${!item.desbloqueado and item.modulo.disponivel}" class="module-lock-badge"><img th:src="@{/img/sprites/icon-lock.png}" alt="" class="sprite-icon-sm"> Bloqueado</span>
+                    <span th:if="${!item.modulo.disponivel}" class="world-coming-soon-badge module-lock-badge"><img th:src="@{/img/sprites/icon-lock.png}" alt="" class="sprite-icon-sm"> Em Breve</span>
                 </div>
             </a>
 

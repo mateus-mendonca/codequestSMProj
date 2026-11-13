@@ -1,8 +1,9 @@
 package com.codequest.controller;
 
 import com.codequest.model.Modulo;
-import com.codequest.model.QuizQuestionDTO;
-import com.codequest.model.QuizResultDTO;
+import com.codequest.dto.QuizQuestionDTO;
+import com.codequest.dto.QuizResultDTO;
+import com.codequest.dto.QuizSubmission;
 import com.codequest.service.EtapaService;
 import com.codequest.service.ModuloService;
 import com.codequest.service.ProgressoService;
@@ -38,8 +39,14 @@ public class QuizController {
     public void verQuizPage(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("moduloId"));
-            Modulo modulo = moduloService.buscar(moduloId);
             String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId)) {
+                ctx.redirect("/modulos?bloqueado=true");
+                return;
+            }
+
+            Modulo modulo = moduloService.buscar(moduloId);
 
             int totalEtapas = etapaService.listarPorModulo(moduloId).size();
             if (!progressoService.podeAcessarQuiz(usuarioId, moduloId, totalEtapas)) {
@@ -47,7 +54,7 @@ public class QuizController {
                 return;
             }
 
-            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
+            com.codequest.dto.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
             ctx.render("quiz.html", Map.of(
                     "modulo", modulo,
                     "resumoJogador", resumoJogador
@@ -73,12 +80,6 @@ public class QuizController {
         } catch (Exception e) {
             ctx.status(500).result("Erro ao gerar quiz: " + e.getMessage());
         }
-    }
-
-    public static class QuizSubmission {
-        public Map<Integer, String> respostas = new HashMap<>();
-        public int vidasRestantes = 3;
-        public String usuarioId = "aluno_demo";
     }
 
     public void finalizarQuiz(Context ctx) {

@@ -100,3 +100,17 @@ Para rodar toda a suíte de testes unitários:
 ```bash
 mvn test
 ```
+
+### Testes da experiência visual
+
+- `gjs src/test/js/quiz-auto-advance.gjs.js`: testes do avanço automático após acertos, contagem regressiva, cancelamento e finalização única do quiz.
+- `gjs src/test/js/experience.gjs.js`: testes de tema e sequência do tutorial usando o motor JavaScript do sistema.
+- `python3 src/test/browser/experience.py`: testes no Firefox headless, com o servidor isolado em `http://localhost:7001`. Usa um perfil temporário e a porta Marionette 2828; requer essa porta livre.
+
+O tutorial inicia na página inicial e acompanha o percurso entre telas. Use Tutorial para rever as orientações da tela atual. Tema e andamento ficam salvos neste navegador.
+
+### Organização do código
+
+Consulte [a documentação de arquitetura](docs/architecture.md) para localizar as responsabilidades, configurar o tempo de avanço do quiz e executar os testes com dados isolados.
+
+- `python3 src/test/resources/test_asset_links.py`: verifica os caminhos de estilos, scripts, imagens e imports.

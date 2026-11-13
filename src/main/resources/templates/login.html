@@ -2,23 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${cadastro != null && cadastro} ? 'CodeQuest — Criar Conta' : 'CodeQuest — Entrar'">CodeQuest — Entrar</title>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/template-layouts.css}">
 </head>
-<body>
+<body class="page-layout">
 
 <header th:replace="~{fragments/layout :: navBreadcrumb(active='auth')}"></header>
 
 <div class="auth-wrapper">
     <img th:src="@{/img/Joinha.png}" alt="Mascote dando joinha" class="auth-mascot">
-    
-    <div class="section-label" style="text-align: center; margin-bottom: 6px;">
+
+    <div class="auth-section-label section-label">
         <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon">
         <span th:text="${cadastro != null && cadastro} ? 'NOVO EXPLORADOR' : 'BEM-VINDO DE VOLTA'">BEM-VINDO DE VOLTA</span>
     </div>
-    
+
     <h1 class="auth-title" th:text="${cadastro != null && cadastro} ? 'Crie sua conta para salvar seu progresso!' : 'Pronto para continuar sua missão?'">
         Pronto para continuar sua missão?
     </h1>

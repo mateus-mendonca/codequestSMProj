@@ -1,0 +1,17 @@
+/* ---------- Rodapé ---------- */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    background: var(--bg-surface);
+    border-top: 2px solid var(--border-soft);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-top: auto;
+}
+
+.footer-muted {
+    color: var(--text-muted);
+}

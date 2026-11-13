@@ -1,0 +1,153 @@
+/* ==========================================================================
+   SISTEMA DE TOAST NOTIFICATIONS
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: var(--shadow-lg);
+    animation: toast-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s ease;
+    max-width: 380px;
+}
+
+.toast-success {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.toast-warning {
+    border-color: var(--accent-orange);
+    background: var(--accent-orange-light);
+}
+
+.toast-danger {
+    border-color: var(--accent-red);
+    background: var(--accent-red-light);
+}
+
+.toast-icon {
+    font-size: 18px;
+}
+
+.toast-msg {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.toast-close {
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 20px;
+    line-height: 1;
+    padding: 2px 4px;
+    transition: color 0.15s ease;
+}
+
+.toast-close:hover {
+    color: var(--text-primary);
+}
+
+.toast-hiding {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ==========================================================================
+   MODAL DE CONFIRMAÇÃO
+   ========================================================================== */
+.cq-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modal-fade-in 0.2s ease-out;
+}
+
+.cq-modal-card {
+    background: var(--bg-surface);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+    animation: modal-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cq-modal-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.cq-modal-title {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.cq-modal-desc {
+    margin: 0 0 24px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.cq-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+@keyframes modal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modal-scale-in {
+    from {
+        transform: scale(0.92);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,6 @@
+.navbar { gap: 16px; flex-wrap: wrap; }
+.navbar > .logo, .navbar > .navbar-brand-row { order: -1; }
+.cq-theme, .cq-help { flex-shrink: 0; }
+.btn-primary { color: var(--text-on-primary); }
+html { color-scheme: light; }
+@media (max-width: 650px) { .navbar { padding: 12px 16px; gap: 10px; } .cq-theme, .cq-help { padding: 8px 12px; font-size: 13px; } .player-hud { max-width: 100%; flex-wrap: wrap; } }

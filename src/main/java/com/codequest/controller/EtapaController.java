@@ -33,13 +33,18 @@ public class EtapaController {
     public void verModuloDetails(Context ctx) {
         try {
             int moduloId = Integer.parseInt(ctx.pathParam("id"));
+            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
+
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId)) {
+                ctx.redirect("/modulos?bloqueado=true");
+                return;
+            }
+
             Modulo modulo = moduloService.buscar(moduloId);
             List<Etapa> etapas = etapaService.listarPorModulo(moduloId);
-
-            String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
             int etapaMaxima = progressoService.obterEtapaMaximaDesbloqueada(usuarioId, moduloId);
             boolean quizDesbloqueado = progressoService.podeAcessarQuiz(usuarioId, moduloId, etapas.size());
-            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
+            com.codequest.dto.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
 
             Map<String, Object> model = new HashMap<>();
             model.put("modulo", modulo);
@@ -60,6 +65,11 @@ public class EtapaController {
             int numero = Integer.parseInt(ctx.pathParam("numero"));
             String usuarioId = ctx.queryParam("usuario") != null ? ctx.queryParam("usuario") : "aluno_demo";
 
+            if (!progressoService.podeAcessarModulo(usuarioId, moduloId)) {
+                ctx.redirect("/modulos?bloqueado=true");
+                return;
+            }
+
             Modulo modulo = moduloService.buscar(moduloId);
             List<Etapa> todasEtapas = etapaService.listarPorModulo(moduloId);
 
@@ -77,7 +87,7 @@ public class EtapaController {
 
             int etapaMaximaAtual = progressoService.obterEtapaMaximaDesbloqueada(usuarioId, moduloId);
             boolean quizDesbloqueado = progressoService.podeAcessarQuiz(usuarioId, moduloId, todasEtapas.size());
-            com.codequest.model.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
+            com.codequest.dto.ResumoJogadorDTO resumoJogador = progressoService.obterResumoJogador(usuarioId);
 
             Map<String, Object> model = new HashMap<>();
             model.put("modulo", modulo);

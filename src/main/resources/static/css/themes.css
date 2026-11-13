@@ -1,0 +1,19 @@
+/* Shared experience preferences. */
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg-main: #101c18; --bg-surface: #192b23; --bg-card: #192b23;
+    --bg-soft: #23392f; --bg-alt: #2c4538; --border: #486254;
+    --border-soft: #344c40; --border-dark: #668473;
+    --text-primary: #edf8f1; --text-secondary: #c1d7c9; --text-muted: #aac4b5;
+    --primary-dark: #62e4ad; --primary-light: #183e2c;
+    --accent-blue-light: #162e4a; --accent-blue-dark: #91bfff;
+    --accent-purple-light: #322347; --accent-red-light: #462126;
+    --accent-orange-light: #432c1b; --accent-yellow-light: #41391b;
+    --text-danger: #ffb4bc; --text-on-primary: #08291b;
+    --accent-purple: #bb9cff; --accent-blue: #8bbaff;
+}
+html[data-theme="dark"] .navbar,
+html[data-theme="dark"] .question-card,
+html[data-theme="dark"] .option-btn,
+html[data-theme="dark"] .hud-bar,
+html[data-theme="dark"] .results-card { background: var(--bg-surface); }

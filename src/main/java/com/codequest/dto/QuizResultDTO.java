@@ -1,4 +1,4 @@
-package com.codequest.model;
+package com.codequest.dto;
 
 import java.util.List;
 

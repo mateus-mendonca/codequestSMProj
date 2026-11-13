@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
+    <script src="/js/experience.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="'Quiz Final: ' + ${modulo.titulo} + ' — CodeQuest'">CodeQuest — Quiz Final</title>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
@@ -9,10 +11,10 @@
     <style>
         :root {
             --quiz-bg: var(--bg-main, #F4F8F6);
-            --card-bg: #FFFFFF;
+            --card-bg: var(--bg-surface);
             --card-border: var(--border, #DDE7E2);
             --accent-green: var(--primary, #24C98B);
-            --accent-green-dark: #179b68;
+            --accent-green-dark: var(--primary-dark);
             --accent-green-glow: rgba(36, 201, 139, 0.25);
             --accent-purple: #8B5CF6;
             --accent-cyan: #3B82F6;
@@ -22,7 +24,7 @@
 
         body {
             background-color: var(--quiz-bg);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(36, 201, 139, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
             font-family: var(--font-main, 'Nunito', sans-serif);
@@ -45,7 +47,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #FFFFFF;
+            background: var(--bg-surface);
             border: 2px solid var(--card-border);
             padding: 1.2rem 1.8rem;
             border-radius: 20px;
@@ -104,7 +106,7 @@
 
         /* Question Card */
         .question-card {
-            background: #FFFFFF;
+            background: var(--bg-surface);
             border: 2px solid var(--card-border);
             border-radius: 24px;
             padding: 2.5rem;
@@ -114,8 +116,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .question-meta {
@@ -164,7 +173,7 @@
         .option-btn {
             display: flex;
             align-items: center;
-            background: #FFFFFF;
+            background: var(--bg-surface);
             border: 2px solid var(--card-border);
             border-radius: 16px;
             padding: 1.2rem 1.5rem;
@@ -222,7 +231,7 @@
         .option-btn.wrong {
             background: var(--accent-red-light, #fef2f2) !important;
             border-color: var(--danger-red) !important;
-            color: #b91c1c !important;
+            color: var(--text-danger) !important;
             box-shadow: 0 4px 0 #b91c1c !important;
             animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
@@ -233,10 +242,27 @@
         }
 
         @keyframes shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(3px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
-            40%, 60% { transform: translate3d(5px, 0, 0); }
+
+            10%,
+            90% {
+                transform: translate3d(-2px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(3px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-5px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(5px, 0, 0);
+            }
         }
 
         /* Explanation Box */
@@ -266,9 +292,20 @@
         }
 
         @keyframes mascotBounceIn {
-            0% { transform: scale(0.6) translateY(10px); opacity: 0; }
-            70% { transform: scale(1.08) translateY(-4px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+            0% {
+                transform: scale(0.6) translateY(10px);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.08) translateY(-4px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
 
         .feedback-content {
@@ -294,7 +331,7 @@
             display: block;
             background: var(--accent-red-light, #fef2f2);
             border-left: 5px solid var(--danger-red);
-            color: #991b1b;
+            color: var(--text-danger);
         }
 
         .btn-next {
@@ -322,7 +359,7 @@
         /* Results Modal / Screen */
         .results-container {
             display: none;
-            background: #FFFFFF;
+            background: var(--bg-surface);
             border: 2px solid var(--card-border);
             border-radius: 28px;
             padding: 3.5rem 2.5rem;
@@ -332,8 +369,15 @@
         }
 
         @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .stars-row {
@@ -426,243 +470,277 @@
         }
     </style>
 </head>
+
 <body>
 
-<header th:replace="~{fragments/layout :: navBreadcrumb(active='quiz')}"></header>
+    <header th:replace="~{fragments/layout :: navBreadcrumb(active='quiz')}"></header>
 
-<div class="quiz-wrapper">
-    <!-- HUD -->
-    <div class="hud-bar" id="hudBar">
-        <div class="lives-container" id="livesContainer">
-            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart1">
-            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart2">
-            <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart3">
-        </div>
-        <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="question-counter" id="questionCounter">Questão 1/10</div>
-    </div>
-
-    <!-- Question Box -->
-    <div class="question-card" id="questionCard">
-        <div class="question-meta">
-            <span class="badge-cat" id="badgeCategory">Categoria</span>
-            <span class="badge-lvl" id="badgeLevel">Fácil</span>
-        </div>
-        <h2 class="question-title" id="questionTitle">Carregando pergunta...</h2>
-
-        <div class="options-list" id="optionsList">
-            <!-- Opções geradas dinamicamente via JavaScript -->
-        </div>
-
-        <div class="explanation-box" id="explanationBox"></div>
-        <button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima Questão &rarr;</button>
-    </div>
-
-    <!-- Results Screen -->
-    <div class="results-container" id="resultsContainer">
-        <div id="resultsMascotWrapper">
-            <img id="resultsMascotImg" src="/img/Pulando.png" alt="Mascote" class="results-mascot">
-        </div>
-        <div class="stars-row">
-            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 1" class="star-item" id="star1">
-            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 2" class="star-item" id="star2">
-            <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 3" class="star-item" id="star3">
-        </div>
-        <h1 class="results-title" id="resultsTitle">Quiz Concluído!</h1>
-        <p style="color: var(--text-secondary); font-size: 1.15rem; font-weight: 700;" id="resultsSubtitle">Você mandou muito bem no Módulo!</p>
-
-        <div class="xp-badges-grid">
-            <div class="xp-card">
-                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-book.png}" alt="Etapas concluídas" class="sprite-icon-lg"></div>
-                <div class="xp-card-val">+100 XP</div>
-                <div class="xp-card-label">Etapas Concluídas</div>
+    <div class="quiz-wrapper">
+        <!-- HUD -->
+        <div class="hud-bar" id="hudBar">
+            <div class="lives-container" id="livesContainer">
+                <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart1">
+                <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart2">
+                <img th:src="@{/img/sprites/icon-heart.png}" alt="Vida" class="heart" id="heart3">
             </div>
-            <div class="xp-card" id="cardModuloCompleted">
-                <div class="xp-card-icon">
-                    <img th:src="@{/img/sprites/icon-trophy.png}" alt="Troféu" class="sprite-icon-lg">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">Questão 1/10</div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="question-card" id="questionCard">
+            <div class="question-meta">
+                <span class="badge-cat" id="badgeCategory">Categoria</span>
+                <span class="badge-lvl" id="badgeLevel">Fácil</span>
+            </div>
+            <h2 class="question-title" id="questionTitle">Carregando pergunta...</h2>
+
+            <div class="options-list" id="optionsList">
+                <!-- Opções geradas dinamicamente via JavaScript -->
+            </div>
+
+            <div class="explanation-box" id="explanationBox"></div>
+            <button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima Questão &rarr;</button>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-container" id="resultsContainer">
+            <div id="resultsMascotWrapper">
+                <img id="resultsMascotImg" src="/img/Pulando.png" alt="Mascote" class="results-mascot">
+            </div>
+            <div class="stars-row">
+                <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 1" class="star-item" id="star1">
+                <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 2" class="star-item" id="star2">
+                <img th:src="@{/img/sprites/icon-trophy.png}" alt="Estrela 3" class="star-item" id="star3">
+            </div>
+            <h1 class="results-title" id="resultsTitle">Quiz Concluído!</h1>
+            <p style="color: var(--text-secondary); font-size: 1.15rem; font-weight: 700;" id="resultsSubtitle">Você
+                mandou muito bem no Módulo!</p>
+
+            <div class="xp-badges-grid">
+                <div class="xp-card">
+                    <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-book.png}" alt="Etapas concluídas"
+                            class="sprite-icon-lg"></div>
+                    <div class="xp-card-val">+100 XP</div>
+                    <div class="xp-card-label">Etapas Concluídas</div>
                 </div>
-                <div class="xp-card-val">+100 XP</div>
-                <div class="xp-card-label">Módulo Concluído</div>
+                <div class="xp-card" id="cardModuloCompleted">
+                    <div class="xp-card-icon">
+                        <img th:src="@{/img/sprites/icon-trophy.png}" alt="Troféu" class="sprite-icon-lg">
+                    </div>
+                    <div class="xp-card-val">+100 XP</div>
+                    <div class="xp-card-label">Módulo Concluído</div>
+                </div>
+                <div class="xp-card" id="cardPerfect" style="display:none;">
+                    <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-diamond.png}" alt="Nota máxima"
+                            class="sprite-icon-lg"></div>
+                    <div class="xp-card-val">+50 XP</div>
+                    <div class="xp-card-label">Nota Máxima</div>
+                </div>
+                <div class="xp-card" id="cardNoLives" style="display:none;">
+                    <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-heart.png}" alt="Sem perder vidas"
+                            class="sprite-icon-lg"></div>
+                    <div class="xp-card-val">+30 XP</div>
+                    <div class="xp-card-label">Sem Perder Vidas</div>
+                </div>
             </div>
-            <div class="xp-card" id="cardPerfect" style="display:none;">
-                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-diamond.png}" alt="Nota máxima" class="sprite-icon-lg"></div>
-                <div class="xp-card-val">+50 XP</div>
-                <div class="xp-card-label">Nota Máxima</div>
+
+            <div style="font-size: 2.2rem; font-weight: 900; color: var(--accent-green-dark); margin: 1.5rem 0;"
+                id="totalXpDisplay">
+                Total: +200 XP
             </div>
-            <div class="xp-card" id="cardNoLives" style="display:none;">
-                <div class="xp-card-icon"><img th:src="@{/img/sprites/icon-heart.png}" alt="Sem perder vidas" class="sprite-icon-lg"></div>
-                <div class="xp-card-val">+30 XP</div>
-                <div class="xp-card-label">Sem Perder Vidas</div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <a th:href="@{'/modulos/' + ${modulo.id + 1}}" id="btnNextModule" class="btn-restart"
+                    style="background: var(--accent-green); color: #ffffff; flex: 1; min-width: 220px;">
+                    <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Próximo Módulo &rarr;
+                </a>
+
+                <button onclick="window.location.reload()" class="btn-restart"
+                    style="background: var(--bg-surface); border: 2px solid var(--card-border); color: var(--text-primary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
+                    <img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> Refazer Quiz
+                </button>
+
+                <a th:href="@{'/modulos/' + ${modulo.id}}" class="btn-restart"
+                    style="background: var(--bg-soft); border: 2px solid var(--card-border); color: var(--text-secondary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
+                    <img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> Trilha do Módulo
+                </a>
             </div>
-        </div>
-
-        <div style="font-size: 2.2rem; font-weight: 900; color: var(--accent-green-dark); margin: 1.5rem 0;" id="totalXpDisplay">
-            Total: +200 XP
-        </div>
-
-        <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
-            <a th:href="@{'/modulos/' + ${modulo.id + 1}}" 
-               id="btnNextModule"
-               class="btn-restart" 
-               style="background: var(--accent-green); color: #ffffff; flex: 1; min-width: 220px;">
-               <img th:src="@{/img/sprites/icon-rocket.png}" alt="" class="sprite-icon"> Próximo Módulo &rarr;
-            </a>
-            
-            <button onclick="window.location.reload()" 
-                    class="btn-restart" 
-                    style="background: #ffffff; border: 2px solid var(--card-border); color: var(--text-primary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
-               <img th:src="@{/img/sprites/icon-target.png}" alt="" class="sprite-icon"> Refazer Quiz
-            </button>
-
-            <a th:href="@{'/modulos/' + ${modulo.id}}" 
-               class="btn-restart" 
-               style="background: var(--bg-soft); border: 2px solid var(--card-border); color: var(--text-secondary); box-shadow: 0 3px 0 var(--border-dark); flex: 1; min-width: 180px;">
-               <img th:src="@{/img/sprites/icon-map.png}" alt="" class="sprite-icon"> Trilha do Módulo
-            </a>
         </div>
     </div>
-</div>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
 
-<script th:inline="javascript">
-    const moduloId = /*[[${modulo.id}]]*/ 1;
-    let questions = [];
-    let currentIndex = 0;
-    let lives = 3;
-    let userAnswers = {}; // qId -> key (A, B, C ou D)
-    let isAnswered = false;
+    <script th:inline="javascript">
+        const moduloId = /*[[${modulo.id}]]*/ 1;
+        let questions = [];
+        let currentIndex = 0;
+        let lives = 3;
+        let userAnswers = {}; // qId -> key (A, B, C ou D)
+        let isAnswered = false;
+        let isFinishing = false;
+        let autoAdvanceTimeout = null;
+        let countdownInterval = null;
 
-    // Web Audio API para Efeitos Sonoros
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    function playSound(type) {
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        function cancelAutoAdvance() {
+            clearTimeout(autoAdvanceTimeout);
+            clearInterval(countdownInterval);
+            autoAdvanceTimeout = null;
+            countdownInterval = null;
         }
-        const now = audioCtx.currentTime;
 
-        if (type === 'correct') {
-            // Arpejo positivo e brilhante (C5 -> E5 -> G5)
-            [523.25, 659.25, 783.99].forEach((freq, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-                gain.gain.setValueAtTime(0.2, now + idx * 0.08);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(now + idx * 0.08);
-                osc.stop(now + idx * 0.08 + 0.25);
-            });
-        } else if (type === 'wrong') {
-            // Tom grave de erro estilo game over (buzz duplo em 160Hz -> 110Hz)
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(160, now);
-            osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now);
-            osc.stop(now + 0.35);
-        } else if (type === 'win') {
-            [440, 554.37, 659.25, 880].forEach((freq, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(freq, now + idx * 0.1);
-                gain.gain.setValueAtTime(0.25, now + idx * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.4);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(now + idx * 0.1);
-                osc.stop(now + idx * 0.1 + 0.4);
-            });
+        function scheduleAutoAdvance() {
+            cancelAutoAdvance();
+            let secondsRemaining = 3;
+            const button = document.getElementById('btnNext');
+            const action = currentIndex === questions.length - 1 ? 'Ver resultado' : 'Próxima questão';
+            const updateLabel = () => {
+                button.innerText = `${action} em ${secondsRemaining} ${secondsRemaining === 1 ? 'segundo' : 'segundos'}… (clique para antecipar)`;
+            };
+            updateLabel();
+            countdownInterval = setInterval(() => {
+                secondsRemaining = Math.max(0, secondsRemaining - 1);
+                updateLabel();
+            }, 1000);
+            autoAdvanceTimeout = setTimeout(nextQuestion, 3000);
         }
-    }
 
-    async function loadQuestions() {
-        try {
-            const resp = await fetch(`/api/modulos/${moduloId}/quiz/questoes`);
-            if (!resp.ok) {
-                const errText = await resp.text();
-                throw new Error(errText);
-            }
-            questions = await resp.json();
-            if (questions && questions.length > 0) {
-                renderQuestion();
-            } else {
-                document.getElementById('questionTitle').innerText = "Nenhuma questão encontrada para este módulo.";
-            }
-        } catch (e) {
-            console.error("Erro ao carregar questões:", e);
-            document.getElementById('questionTitle').innerText = "Erro ao carregar as questões. Por favor, recarregue a página.";
-        }
-    }
-
-    function renderQuestion() {
-        isAnswered = false;
-        const q = questions[currentIndex];
-
-        // Atualizar HUD
-        document.getElementById('questionCounter').innerText = `Questão ${currentIndex + 1}/${questions.length}`;
-        const fillPercent = ((currentIndex) / questions.length) * 100;
-        document.getElementById('progressFill').style.width = fillPercent + '%';
-
-        // Meta e Título
-        document.getElementById('badgeCategory').innerText = q.categoria;
-        document.getElementById('badgeLevel').innerText = q.nivel;
-        document.getElementById('questionTitle').innerText = q.enunciado;
-
-        // Limpar explicação e botão próximo
-        const expBox = document.getElementById('explanationBox');
-        expBox.className = 'explanation-box';
-        expBox.style.display = 'none';
-
-        const btnNext = document.getElementById('btnNext');
-        btnNext.style.display = 'none';
-        btnNext.innerText = "Próxima Questão \u2192";
-
-        // Renderizar Opções
-        const optionsList = document.getElementById('optionsList');
-        optionsList.innerHTML = '';
-
-        q.alternativas.forEach(op => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.dataset.key = op.key;
-            btn.innerHTML = `<span class="option-key">${op.key}</span> <span>${op.text}</span>`;
-            btn.onclick = () => selectOption(q.id, op.key, btn);
-            optionsList.appendChild(btn);
+        window.addEventListener('pagehide', () => {
+            cancelAutoAdvance();
+            document.getElementById('btnNext').innerText = 'Continuar →';
         });
-    }
 
-    function selectOption(qId, selectedKey, btnElement) {
-        if (isAnswered) return;
-        isAnswered = true;
+        // Web Audio API para Efeitos Sonoros
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        userAnswers[qId] = selectedKey;
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const now = audioCtx.currentTime;
 
-        const q = questions[currentIndex];
-        const isCorrect = (selectedKey === q.correta);
+            if (type === 'correct') {
+                // Arpejo positivo e brilhante (C5 -> E5 -> G5)
+                [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.25);
+                });
+            } else if (type === 'wrong') {
+                // Tom grave de erro estilo game over (buzz duplo em 160Hz -> 110Hz)
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'win') {
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    gain.gain.setValueAtTime(0.25, now + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.1);
+                    osc.stop(now + idx * 0.1 + 0.4);
+                });
+            }
+        }
 
-        const buttons = document.querySelectorAll('.option-btn');
-        buttons.forEach(b => b.disabled = true);
+        async function loadQuestions() {
+            try {
+                const resp = await fetch(`/api/modulos/${moduloId}/quiz/questoes`);
+                if (!resp.ok) {
+                    const errText = await resp.text();
+                    throw new Error(errText);
+                }
+                questions = await resp.json();
+                if (questions && questions.length > 0) {
+                    renderQuestion();
+                } else {
+                    document.getElementById('questionTitle').innerText = "Nenhuma questão encontrada para este módulo.";
+                }
+            } catch (e) {
+                console.error("Erro ao carregar questões:", e);
+                document.getElementById('questionTitle').innerText = "Erro ao carregar as questões. Por favor, recarregue a página.";
+            }
+        }
 
-        const expBox = document.getElementById('explanationBox');
-        const btnNext = document.getElementById('btnNext');
+        function renderQuestion() {
+            cancelAutoAdvance();
+            isAnswered = false;
+            const q = questions[currentIndex];
 
-        if (isCorrect) {
-            btnElement.classList.add('correct');
-            playSound('correct');
-            expBox.className = 'explanation-box show-correct';
-            expBox.innerHTML = `
+            // Atualizar HUD
+            document.getElementById('questionCounter').innerText = `Questão ${currentIndex + 1}/${questions.length}`;
+            const fillPercent = ((currentIndex) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = fillPercent + '%';
+
+            // Meta e Título
+            document.getElementById('badgeCategory').innerText = q.categoria;
+            document.getElementById('badgeLevel').innerText = q.nivel;
+            document.getElementById('questionTitle').innerText = q.enunciado;
+
+            // Limpar explicação e botão próximo
+            const expBox = document.getElementById('explanationBox');
+            expBox.className = 'explanation-box';
+            expBox.style.display = 'none';
+
+            const btnNext = document.getElementById('btnNext');
+            btnNext.style.display = 'none';
+            btnNext.innerText = "Próxima Questão \u2192";
+
+            // Renderizar Opções
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+
+            q.alternativas.forEach(op => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.dataset.key = op.key;
+                btn.innerHTML = `<span class="option-key">${op.key}</span> <span>${op.text}</span>`;
+                btn.onclick = () => selectOption(q.id, op.key, btn);
+                optionsList.appendChild(btn);
+            });
+        }
+
+        function selectOption(qId, selectedKey, btnElement) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            userAnswers[qId] = selectedKey;
+
+            const q = questions[currentIndex];
+            const isCorrect = (selectedKey === q.correta);
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+
+            const expBox = document.getElementById('explanationBox');
+            const btnNext = document.getElementById('btnNext');
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                playSound('correct');
+                expBox.className = 'explanation-box show-correct';
+                expBox.innerHTML = `
                 <div class="feedback-flex">
                     <img src="/img/Pulando.png" alt="Mascote comemorando" class="feedback-mascot">
                     <div class="feedback-content">
@@ -670,36 +748,36 @@
                     </div>
                 </div>
             `;
-        } else {
-            btnElement.classList.add('wrong');
+            } else {
+                btnElement.classList.add('wrong');
 
-            // Destacar em verde a alternativa correta
-            buttons.forEach(b => {
-                if (b.dataset.key === q.correta) {
-                    b.classList.add('correct');
+                // Destacar em verde a alternativa correta
+                buttons.forEach(b => {
+                    if (b.dataset.key === q.correta) {
+                        b.classList.add('correct');
+                    }
+                });
+
+                playSound('wrong');
+
+                // Perder vida
+                if (lives === 3) {
+                    const h3 = document.getElementById('heart3');
+                    h3.classList.add('lost');
+                    h3.src = '/img/sprites/icon-heart-empty.png';
+                } else if (lives === 2) {
+                    const h2 = document.getElementById('heart2');
+                    h2.classList.add('lost');
+                    h2.src = '/img/sprites/icon-heart-empty.png';
+                } else if (lives === 1) {
+                    const h1 = document.getElementById('heart1');
+                    h1.classList.add('lost');
+                    h1.src = '/img/sprites/icon-heart-empty.png';
                 }
-            });
+                lives--;
 
-            playSound('wrong');
-
-            // Perder vida
-            if (lives === 3) {
-                const h3 = document.getElementById('heart3');
-                h3.classList.add('lost');
-                h3.src = '/img/sprites/icon-heart-empty.png';
-            } else if (lives === 2) {
-                const h2 = document.getElementById('heart2');
-                h2.classList.add('lost');
-                h2.src = '/img/sprites/icon-heart-empty.png';
-            } else if (lives === 1) {
-                const h1 = document.getElementById('heart1');
-                h1.classList.add('lost');
-                h1.src = '/img/sprites/icon-heart-empty.png';
-            }
-            lives--;
-
-            expBox.className = 'explanation-box show-wrong';
-            expBox.innerHTML = `
+                expBox.className = 'explanation-box show-wrong';
+                expBox.innerHTML = `
                 <div class="feedback-flex">
                     <img src="/img/Sentado.png" alt="Mascote estudando" class="feedback-mascot">
                     <div class="feedback-content">
@@ -708,92 +786,100 @@
                 </div>
             `;
 
-            if (lives === 0) {
-                btnNext.innerText = "Ver Resultado (Vidas Esgotadas) \u2192";
+                if (lives === 0) {
+                    btnNext.innerText = "Ver Resultado (Vidas Esgotadas) \u2192";
+                }
+            }
+
+            expBox.style.display = 'block';
+            btnNext.style.display = 'block';
+            if (isCorrect) scheduleAutoAdvance();
+        }
+
+        function nextQuestion() {
+            if (!isAnswered || isFinishing) return;
+            cancelAutoAdvance();
+            isAnswered = false;
+            currentIndex++;
+            if (currentIndex < questions.length && lives > 0) {
+                renderQuestion();
+            } else {
+                finishQuiz();
             }
         }
 
-        expBox.style.display = 'block';
-        btnNext.style.display = 'block';
-    }
+        async function finishQuiz() {
+            if (isFinishing) return;
+            isFinishing = true;
+            cancelAutoAdvance();
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('hudBar').style.display = 'none';
 
-    function nextQuestion() {
-        currentIndex++;
-        if (currentIndex < questions.length && lives > 0) {
-            renderQuestion();
-        } else {
-            finishQuiz();
-        }
-    }
+            try {
+                const resp = await fetch(`/api/modulos/${moduloId}/quiz/finalizar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        respostas: userAnswers,
+                        vidasRestantes: lives,
+                        usuarioId: "aluno_demo"
+                    })
+                });
 
-    async function finishQuiz() {
-        document.getElementById('questionCard').style.display = 'none';
-        document.getElementById('hudBar').style.display = 'none';
-
-        try {
-            const resp = await fetch(`/api/modulos/${moduloId}/quiz/finalizar`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    respostas: userAnswers,
-                    vidasRestantes: lives,
-                    usuarioId: "aluno_demo"
-                })
-            });
-
-            const result = await resp.json();
-            showResults(result);
-        } catch (e) {
-            console.error("Erro ao finalizar quiz:", e);
-        }
-    }
-
-    function showResults(res) {
-        const container = document.getElementById('resultsContainer');
-        container.style.display = 'block';
-
-        const titleEl = document.getElementById('resultsTitle');
-        const subtitleEl = document.getElementById('resultsSubtitle');
-        const cardModuloCompleted = document.getElementById('cardModuloCompleted');
-        const btnNextModule = document.getElementById('btnNextModule');
-        const mascotImg = document.getElementById('resultsMascotImg');
-
-        if (res.passou) {
-            playSound('win');
-            if (mascotImg) mascotImg.src = "/img/Pulando.png";
-            titleEl.innerText = "Quiz Concluído!";
-            subtitleEl.innerText = `Parabéns! Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões e concluiu o módulo!`;
-
-            if (res.estrelas >= 1) document.getElementById('star1').classList.add('active');
-            if (res.estrelas >= 2) document.getElementById('star2').classList.add('active');
-            if (res.estrelas >= 3) document.getElementById('star3').classList.add('active');
-
-            if (res.notaMaxima) {
-                document.getElementById('cardPerfect').style.display = 'block';
+                const result = await resp.json();
+                showResults(result);
+            } catch (e) {
+                console.error("Erro ao finalizar quiz:", e);
             }
-            if (res.semPerderVidas) {
-                document.getElementById('cardNoLives').style.display = 'block';
-            }
-            cardModuloCompleted.style.display = 'block';
-            btnNextModule.style.display = 'inline-flex';
-        } else {
-            playSound('wrong');
-            if (mascotImg) mascotImg.src = "/img/Sentado.png";
-            titleEl.innerText = "Que Pena! Tente Novamente";
-            subtitleEl.innerText = `Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões. Suas vidas acabaram ou você não atingiu a nota mínima.`;
-
-            // Ocultar bônus e navegação do próximo módulo
-            cardModuloCompleted.style.display = 'none';
-            document.getElementById('cardPerfect').style.display = 'none';
-            document.getElementById('cardNoLives').style.display = 'none';
-            btnNextModule.style.display = 'none';
         }
 
-        document.getElementById('totalXpDisplay').innerText = `Total: +${res.xpGanha} XP`;
-    }
+        function showResults(res) {
+            const container = document.getElementById('resultsContainer');
+            container.style.display = 'block';
 
-    window.onload = loadQuestions;
-</script>
-<script th:src="@{/js/main.js}"></script>
+            const titleEl = document.getElementById('resultsTitle');
+            const subtitleEl = document.getElementById('resultsSubtitle');
+            const cardModuloCompleted = document.getElementById('cardModuloCompleted');
+            const btnNextModule = document.getElementById('btnNextModule');
+            const mascotImg = document.getElementById('resultsMascotImg');
+
+            if (res.passou) {
+                playSound('win');
+                if (mascotImg) mascotImg.src = "/img/Pulando.png";
+                titleEl.innerText = "Quiz Concluído!";
+                subtitleEl.innerText = `Parabéns! Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões e concluiu o módulo!`;
+
+                if (res.estrelas >= 1) document.getElementById('star1').classList.add('active');
+                if (res.estrelas >= 2) document.getElementById('star2').classList.add('active');
+                if (res.estrelas >= 3) document.getElementById('star3').classList.add('active');
+
+                if (res.notaMaxima) {
+                    document.getElementById('cardPerfect').style.display = 'block';
+                }
+                if (res.semPerderVidas) {
+                    document.getElementById('cardNoLives').style.display = 'block';
+                }
+                cardModuloCompleted.style.display = 'block';
+                btnNextModule.style.display = 'inline-flex';
+            } else {
+                playSound('wrong');
+                if (mascotImg) mascotImg.src = "/img/Sentado.png";
+                titleEl.innerText = "Que Pena! Tente Novamente";
+                subtitleEl.innerText = `Você acertou ${res.pontuacao} de ${res.totalQuestoes} questões. Suas vidas acabaram ou você não atingiu a nota mínima.`;
+
+                // Ocultar bônus e navegação do próximo módulo
+                cardModuloCompleted.style.display = 'none';
+                document.getElementById('cardPerfect').style.display = 'none';
+                document.getElementById('cardNoLives').style.display = 'none';
+                btnNextModule.style.display = 'none';
+            }
+
+            document.getElementById('totalXpDisplay').innerText = `Total: +${res.xpGanha} XP`;
+        }
+
+        window.onload = loadQuestions;
+    </script>
+
 </body>
+
 </html>
